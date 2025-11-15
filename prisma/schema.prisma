@@ -1,0 +1,75 @@
+// Prisma Schema for Nova Sağlık
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin User Model
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Blog Category Model
+model BlogCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String   @default("#14b8a6")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Blog Post Model
+model BlogPost {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  category    String
+  image       String?
+  published   Boolean  @default(false)
+  views       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Appointment Model
+model Appointment {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String
+  service     String
+  date        String
+  time        String
+  message     String?
+  status      String   @default("pending") // pending, confirmed, completed, cancelled
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Contact Form Submissions
+model Contact {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String
+  subject     String
+  message     String
+  status      String   @default("new") // new, read, replied
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

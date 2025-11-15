@@ -1,0 +1,125 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  image: string | null;
+  category: string;
+  createdAt: string;
+}
+
+export default function News() {
+  const [newsItems, setNewsItems] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLatestBlogs();
+  }, []);
+
+  const fetchLatestBlogs = async () => {
+    try {
+      const res = await fetch('/api/blogs?published=true');
+      const data = await res.json();
+      // En son 2 blog yazısını al
+      const latestBlogs = data.slice(0, 2);
+      setNewsItems(latestBlogs);
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section id="blog">
+      <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-800">
+        En Son Haberler
+      </h2>
+      
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="shimmer h-96 rounded-lg"></div>
+          <div className="shimmer h-96 rounded-lg"></div>
+        </div>
+      ) : newsItems.length === 0 ? (
+        <div className="bg-gray-50 rounded-lg p-8 text-center">
+          <svg className="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <p className="text-gray-600">Henüz blog yazısı yok</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {newsItems.map((news) => (
+            <Link
+              key={news.id}
+              href={`/blog/${news.slug}`}
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer block"
+            >
+              <div className="relative h-48 bg-gray-200">
+                {news.image ? (
+                  <img
+                    src={news.image}
+                    alt={news.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-6xl">📄</span>
+                  </div>
+                )}
+              </div>
+              <div className="p-6">
+                <div className="mb-3">
+                  <span className="inline-block bg-[#14b8a6] text-white px-3 py-1 rounded-full text-xs font-medium">
+                    {news.category}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
+                  {news.title}
+                </h3>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed line-clamp-3">
+                  {news.excerpt}
+                </p>
+                <div className="inline-flex items-center text-[#14b8a6] hover:text-[#0d9488] font-semibold">
+                  Devamını oku
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+      
+      <div className="mt-8">
+        <Link
+          href="/blog"
+          className="inline-flex items-center text-[#1e3a5f] hover:text-[#14b8a6] font-bold text-base"
+        >
+          Tüm Yazılar
+          <svg
+            className="w-5 h-5 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      </div>
+    </section>
+  );
+}
+

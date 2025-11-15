@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-dark: #1e3a5f;
+  --primary-light: #14b8a6;
+  --primary-teal: #14b8a6;
+  --primary-teal-dark: #0d9488;
+  --medical-blue: #2563eb;
+  --medical-green: #10b981;
+  --gradient-start: #1e3a5f;
+  --gradient-end: #14b8a6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Medical Theme Animations */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Medical Cards */
+.medical-card {
+  @apply bg-white rounded-2xl shadow-lg p-8 transition-all duration-300;
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #14b8a6, #2563eb) border-box;
+}
+
+.medical-card:hover {
+  @apply shadow-2xl transform -translate-y-2;
+  border-color: #14b8a6;
+}
+
+/* Glassmorphism Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Medical Gradient Backgrounds */
+.medical-gradient {
+  background: linear-gradient(135deg, #1e3a5f 0%, #14b8a6 100%);
+}
+
+.medical-gradient-soft {
+  background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+}
+
+/* Pulse Animation for Medical Icons */
+.pulse-medical {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Modern Button Styles */
+.btn-medical {
+  @apply bg-gradient-to-r from-[#14b8a6] to-[#10b981] text-white px-6 py-3 rounded-xl font-semibold shadow-lg;
+  transition: all 0.3s ease;
+}
+
+.btn-medical:hover {
+  @apply shadow-2xl transform -translate-y-1;
+  background: linear-gradient(to right, #10b981, #14b8a6);
+}
+
+/* Medical Section Divider */
+.section-divider {
+  height: 3px;
+  background: linear-gradient(to right, transparent, #14b8a6, transparent);
+  margin: 3rem 0;
+}
+
+/* Modern Card Hover Effect */
+.card-hover-lift {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(20, 184, 166, 0.2);
+}
+
+/* Decorative Medical Cross Pattern */
+.medical-pattern {
+  background-image: 
+    repeating-linear-gradient(90deg, #14b8a6 0, #14b8a6 2px, transparent 2px, transparent 20px),
+    repeating-linear-gradient(0deg, #14b8a6 0, #14b8a6 2px, transparent 2px, transparent 20px);
+  opacity: 0.05;
+}
+
+/* Smooth Scroll Indicators */
+.scroll-indicator {
+  @apply animate-bounce;
+}
+
+/* Professional Shadow Levels */
+.shadow-medical-sm {
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.1);
+}
+
+.shadow-medical-md {
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.15);
+}
+
+.shadow-medical-lg {
+  box-shadow: 0 8px 32px rgba(20, 184, 166, 0.2);
+}
+
+.shadow-medical-xl {
+  box-shadow: 0 12px 48px rgba(20, 184, 166, 0.25);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #1e3a5f 0%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Modern Input Styles */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+
+/* Loading Shimmer Effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 50%,
+    #f0f0f0 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Medical Badge */
+.medical-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  background: linear-gradient(135deg, #14b8a6, #10b981);
+  color: white;
+}
+
+/* Stats Counter Animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-number {
+  animation: countUp 0.8s ease-out;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+  
+  .animation-delay-600 {
+    animation-delay: 0.6s;
+  }
+}
+
