@@ -6,7 +6,7 @@ import heroImage from "@/images/hero.png";
 
 export default function Hero() {
   return (
-    <section className="relative medical-gradient text-white overflow-hidden min-h-[500px] flex items-center">
+    <section className="relative medical-gradient text-white overflow-hidden min-h-[600px] flex items-center">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 opacity-15">
         <Image
@@ -31,12 +31,12 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-16 relative z-10">
+      <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-3xl">
           <div className="inline-block medical-badge mb-5 animate-pulse">
             ✓ Sertifikalı Uzman Kadro
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight drop-shadow-lg">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-5 leading-tight drop-shadow-lg">
             7/24 Evde ve Klinik
             <span className="block text-[#14b8a6]">Sağlık Hizmeti</span>
           </h1>

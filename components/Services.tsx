@@ -31,15 +31,15 @@ export default function Services() {
 
   return (
     <section id="hizmetler">
-      <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-800">
+      <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">
         Hizmetlerimiz
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
         {services.map((service, index) => (
           <Link
             key={index}
             href={`/hizmetler/${service.slug}`}
-            className="relative overflow-hidden rounded-2xl shadow-lg card-hover-lift cursor-pointer group h-full min-h-[300px] sm:min-h-[320px] block"
+            className="relative overflow-hidden rounded-xl shadow-lg card-hover-lift cursor-pointer group h-full min-h-[280px] sm:min-h-[300px] block"
           >
             {/* Full Card Image */}
             <div className="absolute inset-0">
@@ -55,11 +55,11 @@ export default function Services() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/70 transition-all duration-300"></div>
             
             {/* Content */}
-            <div className="relative z-10 flex flex-col justify-end h-full p-6 text-white">
-              <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">
+            <div className="relative z-10 flex flex-col justify-end h-full p-4 text-white">
+              <h3 className="text-xl font-bold mb-2 drop-shadow-lg">
                 {service.title}
               </h3>
-              <p className="text-gray-200 text-sm mb-4 leading-relaxed drop-shadow">
+              <p className="text-gray-200 text-xs mb-3 leading-relaxed drop-shadow">
                 {service.description}
               </p>
               <div className="flex items-center gap-2 text-white font-semibold group-hover:gap-4 transition-all">
