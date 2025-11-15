@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
   // Image optimization
   images: {
@@ -9,6 +11,15 @@ const nextConfig = {
         hostname: '**.vercel.app',
       },
     ],
+  },
+  
+  // Webpack config for path alias resolution
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname),
+    };
+    return config;
   },
 }
 
