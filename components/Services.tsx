@@ -34,12 +34,12 @@ export default function Services() {
       <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-800">
         Hizmetlerimiz
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
         {services.map((service, index) => (
           <Link
             key={index}
             href={`/hizmetler/${service.slug}`}
-            className="relative overflow-hidden rounded-2xl shadow-lg card-hover-lift cursor-pointer group h-80 block"
+            className="relative overflow-hidden rounded-2xl shadow-lg card-hover-lift cursor-pointer group h-full min-h-[300px] sm:min-h-[320px] block"
           >
             {/* Full Card Image */}
             <div className="absolute inset-0">

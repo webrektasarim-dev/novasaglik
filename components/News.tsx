@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface BlogPost {
   id: string;
@@ -42,9 +43,9 @@ export default function News() {
       </h2>
       
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="shimmer h-96 rounded-lg"></div>
-          <div className="shimmer h-96 rounded-lg"></div>
+        <div className="space-y-6">
+          <div className="shimmer h-40 rounded-lg"></div>
+          <div className="shimmer h-40 rounded-lg"></div>
         </div>
       ) : newsItems.length === 0 ? (
         <div className="bg-gray-50 rounded-lg p-8 text-center">
@@ -54,48 +55,57 @@ export default function News() {
           <p className="text-gray-600">Henüz blog yazısı yok</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="space-y-6">
           {newsItems.map((news) => (
             <Link
               key={news.id}
               href={`/blog/${news.slug}`}
-              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer block"
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer block group"
             >
-              <div className="relative h-48 bg-gray-200">
-                {news.image ? (
-                  <img
-                    src={news.image}
-                    alt={news.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-6xl">📄</span>
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <div className="mb-3">
-                  <span className="inline-block bg-[#14b8a6] text-white px-3 py-1 rounded-full text-xs font-medium">
-                    {news.category}
-                  </span>
+              <div className="flex flex-col sm:flex-row h-full min-h-[160px] sm:min-h-[140px]">
+                {/* Image */}
+                <div className="relative w-full sm:w-40 md:w-48 h-40 sm:h-full flex-shrink-0 bg-gray-200 overflow-hidden">
+                  {news.image ? (
+                    <Image
+                      src={news.image}
+                      alt={news.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 160px, 192px"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#14b8a6] to-[#10b981]">
+                      <span className="text-4xl">📄</span>
+                    </div>
+                  )}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                  {news.title}
-                </h3>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed line-clamp-3">
-                  {news.excerpt}
-                </p>
-                <div className="inline-flex items-center text-[#14b8a6] hover:text-[#0d9488] font-semibold">
-                  Devamını oku
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                
+                {/* Content */}
+                <div className="flex-1 p-4 sm:p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="mb-2">
+                      <span className="inline-block bg-[#14b8a6] text-white px-2 py-1 rounded-full text-xs font-medium">
+                        {news.category}
+                      </span>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 text-gray-800 line-clamp-2 group-hover:text-[#14b8a6] transition-colors">
+                      {news.title}
+                    </h3>
+                    <p className="text-gray-600 mb-3 text-sm leading-relaxed line-clamp-2 sm:line-clamp-3">
+                      {news.excerpt}
+                    </p>
+                  </div>
+                  <div className="inline-flex items-center text-[#14b8a6] hover:text-[#0d9488] font-semibold text-sm group-hover:gap-2 transition-all">
+                    Devamını oku
+                    <svg
+                      className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </Link>
