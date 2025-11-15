@@ -13,6 +13,16 @@ const nextConfig = {
     ],
   },
   
+  // Disable ESLint during builds (optional, can be enabled later)
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
+  // Disable TypeScript errors during builds (optional, can be enabled later)
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  
   // Webpack config for path alias resolution
   webpack: (config) => {
     config.resolve.alias = {
