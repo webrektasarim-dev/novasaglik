@@ -27,6 +27,27 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
     
+    // Randevu çakışma kontrolü - aynı tarih ve saatte başka randevu var mı?
+    const conflictingAppointment = await prisma.appointment.findFirst({
+      where: {
+        date: data.date,
+        time: data.time,
+        status: {
+          not: 'cancelled' // İptal edilen randevular çakışma sayılmaz
+        }
+      }
+    })
+
+    if (conflictingAppointment) {
+      return NextResponse.json(
+        { 
+          error: 'Bu tarih ve saatte zaten bir randevu var. Lütfen başka bir saat seçin.',
+          conflict: true
+        },
+        { status: 409 }
+      )
+    }
+    
     const appointment = await prisma.appointment.create({
       data: {
         name: data.name,
@@ -40,7 +61,14 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json(appointment)
+    // Email bildirimi gönder (opsiyonel - email servisi kurulduğunda aktif edilebilir)
+    // TODO: Email bildirimi ekle
+
+    return NextResponse.json({
+      success: true,
+      appointment,
+      message: 'Randevu talebiniz alındı. En kısa sürede size dönüş yapacağız.'
+    })
   } catch (error) {
     console.error('Create appointment error:', error)
     return NextResponse.json(

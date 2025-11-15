@@ -46,6 +46,7 @@ export default function AppointmentForm() {
       });
 
       if (res.ok) {
+        const result = await res.json();
         setSuccess(true);
         setFormData({
           name: '',
@@ -59,7 +60,12 @@ export default function AppointmentForm() {
         
         setTimeout(() => setSuccess(false), 5000);
       } else {
-        alert('Randevu oluşturulurken hata oluştu');
+        const error = await res.json();
+        if (error.conflict) {
+          alert(error.error || 'Bu saatte zaten bir randevu var. Lütfen başka bir saat seçin.');
+        } else {
+          alert(error.error || 'Randevu oluşturulurken hata oluştu');
+        }
       }
     } catch (error) {
       console.error('Error:', error);
