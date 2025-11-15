@@ -13,12 +13,14 @@ const nextConfig = {
     ],
   },
   
-  // Webpack alias for path resolution
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname),
-    };
+  // Webpack alias for path resolution (Next.js 15 uses tsconfig paths, but this ensures compatibility)
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@': path.resolve(__dirname),
+      };
+    }
     return config;
   },
 }

@@ -31,14 +31,23 @@ try {
   
   // Build Next.js
   console.log('Building Next.js...');
-  execSync('next build', { 
-    stdio: 'inherit',
-    env: env,
-    shell: true,
-    cwd: process.cwd()
-  });
+  try {
+    execSync('next build', { 
+      stdio: 'inherit',
+      env: env,
+      shell: true,
+      cwd: process.cwd()
+    });
+  } catch (buildError) {
+    console.error('\n❌ Next.js build failed!');
+    console.error('Error details:', buildError.message);
+    if (buildError.stdout) console.error('Stdout:', buildError.stdout.toString());
+    if (buildError.stderr) console.error('Stderr:', buildError.stderr.toString());
+    throw buildError;
+  }
 } catch (error) {
-  console.error('Build failed:', error);
+  console.error('\n❌ Build process failed!');
+  console.error('Error:', error.message);
   process.exit(1);
 }
 
