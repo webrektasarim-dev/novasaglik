@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import serumImage from "@/images/serum.png";
 import enjeksiyonImage from "@/images/enjeksiyon.png";
@@ -10,16 +11,19 @@ export default function Services() {
   const services = [
     {
       title: "Serum Takma",
+      slug: "serum-takma",
       description: "Serum takma, enjeksiyon uygulamaları",
       image: serumImage,
     },
     {
       title: "Enjeksiyon",
+      slug: "enjeksiyon",
       description: "Hemşirelik hizmetleri ile enjeksiyon",
       image: enjeksiyonImage,
     },
     {
       title: "Hemşirelik Hizmeti",
+      slug: "hemsirelik-hizmeti",
       description: "Hemşirelik hizmetleri uzmanından",
       image: hemsireImage,
     },
@@ -32,9 +36,10 @@ export default function Services() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {services.map((service, index) => (
-          <div
+          <Link
             key={index}
-            className="relative overflow-hidden rounded-2xl shadow-lg card-hover-lift cursor-pointer group h-80"
+            href={`/hizmetler/${service.slug}`}
+            className="relative overflow-hidden rounded-2xl shadow-lg card-hover-lift cursor-pointer group h-80 block"
           >
             {/* Full Card Image */}
             <div className="absolute inset-0">
@@ -64,7 +69,7 @@ export default function Services() {
                 </svg>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

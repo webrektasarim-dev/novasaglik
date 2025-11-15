@@ -1,17 +1,27 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function AppointmentForm() {
+interface AppointmentFormProps {
+  defaultService?: string;
+}
+
+export default function AppointmentForm({ defaultService }: AppointmentFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: '',
+    service: defaultService || '',
     date: '',
     time: '',
     message: ''
   });
+  
+  useEffect(() => {
+    if (defaultService) {
+      setFormData(prev => ({ ...prev, service: defaultService }));
+    }
+  }, [defaultService]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
