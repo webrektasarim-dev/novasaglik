@@ -8,6 +8,7 @@ import serumImage from "@/images/serum.png";
 import enjeksiyonImage from "@/images/enjeksiyon.png";
 import hemsireImage from "@/images/hemsire.png";
 import AppointmentForm from "@/components/AppointmentForm";
+import heroImage from "@/images/hero.png";
 
 const services = {
   "serum-takma": {
@@ -45,7 +46,7 @@ const services = {
         <li>✅ 7/24 hizmet imkanı</li>
         <li>✅ Steril ve güvenli uygulama</li>
         <li>✅ Ev konforunda tedavi</li>
-        <li>✅ Uygun fiyat garantisi</li>
+        <li>✅ Bütçe dostu planlar</li>
         <li>✅ Hızlı ve güvenilir hizmet</li>
       </ul>
       
@@ -59,6 +60,59 @@ const services = {
       </ul>
     `,
     serviceName: "Serum Takma"
+  },
+  labaratuvar: {
+    title: "Labaratuvar Hizmetleri",
+    description: "Kan alma, örnek toplama ve resmi laboratuvar raporlama süreçleri.",
+    image: heroImage,
+    content: `
+      <h2>Labaratuvar Hizmeti Hakkında</h2>
+      <p>Nova Sağlık olarak, evinizde güvenli kan alma ve laboratuvar hizmetleri sunuyoruz. Uzman ekibimiz, biyolojik örneklerinizi uluslararası standartlara uygun şekilde alır ve anlaşmalı laboratuvarlarımıza iletir.</p>
+
+      <h3>Hizmet Kapsamımız</h3>
+      <ul>
+        <li><strong>Evde Kan Alma:</strong> Doktorunuzun talep ettiği tüm tetkikler için kan alma hizmeti.</li>
+        <li><strong>Numune Toplama:</strong> İdrar, gaita, boğaz ve burun sürüntüleri gibi örneklerin güvenli toplanması.</li>
+        <li><strong>Check-up Paketleri:</strong> Periyodik sağlık kontrolleri için özel tarama programları.</li>
+        <li><strong>Pre-op Testler:</strong> Ameliyat öncesi gerekli laboratuvar tetkiklerinin evde tamamlanması.</li>
+        <li><strong>Hızlı Raporlama:</strong> Sonuçların dijital ortamda sizinle ve doktorunuzla paylaşılması.</li>
+      </ul>
+
+      <h3>Hangi Testleri Yapıyoruz?</h3>
+      <ul>
+        <li>Tam kan sayımı, biyokimya ve hormon testleri</li>
+        <li>Vitamin-mineral düzeyleri</li>
+        <li>Enfeksiyon paneli (COVID-19, grip vb.)</li>
+        <li>Gebelik, tiroid ve diyabet testleri</li>
+        <li>Kan grubu ve koagülasyon testleri</li>
+      </ul>
+
+      <h3>Hizmet Süreci</h3>
+      <ol>
+        <li><strong>Randevu Oluşturun:</strong> İhtiyaç duyduğunuz testleri iletin.</li>
+        <li><strong>Hazırlık:</strong> Gerekli açlık/tokluk gibi bilgiler tarafınıza iletilir.</li>
+        <li><strong>Evde Uygulama:</strong> Uzman hemşiremiz gerekli örnekleri alır.</li>
+        <li><strong>Laboratuvar Süreci:</strong> Numuneler anlaşmalı laboratuvarımıza ulaştırılır.</li>
+        <li><strong>Sonuç:</strong> Test sonuçları dijital olarak sizinle paylaşılır.</li>
+      </ol>
+
+      <h3>Neden Nova Sağlık?</h3>
+      <ul>
+        <li>✅ Steril ve güvenli kan alma protokolleri</li>
+        <li>✅ Bütçe dostu ve şeffaf fiyatlandırma</li>
+        <li>✅ Hızlı raporlama ve doktorunuza iletim</li>
+        <li>✅ Lisanslı laboratuvarlarla iş birlikleri</li>
+        <li>✅ 7/24 randevu desteği</li>
+      </ul>
+
+      <h3>Önemli Notlar</h3>
+      <ul>
+        <li>Test öncesi açlık/tokluk durumunuz tarafımızca hatırlatılır.</li>
+        <li>Kullanmakta olduğunuz ilaçlar hakkında bilgi vermeniz önemlidir.</li>
+        <li>Sonuçlarınız KVKK kapsamında güvenle saklanır.</li>
+      </ul>
+    `,
+    serviceName: "Labaratuvar Hizmetleri"
   },
   "enjeksiyon": {
     title: "Enjeksiyon Hizmeti",
@@ -96,7 +150,7 @@ const services = {
         <li>✅ Ağrısız enjeksiyon deneyimi</li>
         <li>✅ Eğitim ve danışmanlık desteği</li>
         <li>✅ 7/24 hizmet imkanı</li>
-        <li>✅ Uygun fiyat garantisi</li>
+        <li>✅ Bütçe dostu planlar</li>
       </ul>
       
       <h3>Önemli Notlar</h3>
@@ -157,7 +211,7 @@ const services = {
         <li>✅ Düzenli raporlama ve takip</li>
         <li>✅ 7/24 hizmet imkanı</li>
         <li>✅ Aile ile koordinasyon</li>
-        <li>✅ Uygun fiyat garantisi</li>
+        <li>✅ Bütçe dostu planlar</li>
       </ul>
       
       <h3>Önemli Notlar</h3>

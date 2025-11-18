@@ -27,26 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
     
-    // Randevu çakışma kontrolü - aynı tarih ve saatte başka randevu var mı?
-    const conflictingAppointment = await prisma.appointment.findFirst({
-      where: {
-        date: data.date,
-        time: data.time,
-        status: {
-          not: 'cancelled' // İptal edilen randevular çakışma sayılmaz
-        }
-      }
-    })
-
-    if (conflictingAppointment) {
-      return NextResponse.json(
-        { 
-          error: 'Bu tarih ve saatte zaten bir randevu var. Lütfen başka bir saat seçin.',
-          conflict: true
-        },
-        { status: 409 }
-      )
-    }
+    // Aynı tarih ve saatte birden fazla randevuya izin veriliyor
     
     const appointment = await prisma.appointment.create({
       data: {

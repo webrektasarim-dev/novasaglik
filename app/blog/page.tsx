@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface BlogPost {
   id: string;
@@ -17,12 +18,70 @@ interface BlogPost {
 }
 
 export default function BlogPage() {
+  const { language } = useLanguage();
+  const texts = {
+    tr: {
+      heroTitle: "Sağlık Blog",
+      heroDescription: "Evde sağlık bakımı, hasta bakımı ve sağlıklı yaşam hakkında uzman hemşirelerimizden ipuçları ve öneriler.",
+      all: "Tümü",
+      noPosts: "Henüz blog yazısı yok",
+      noPostsHint: "Admin panelden blog ekleyebilirsiniz",
+      readMore: "Devamını Oku",
+      newsletterTitle: "Sağlık İpuçlarını Kaçırmayın",
+      newsletterDescription: "Yeni makalelerimizden ve sağlık ipuçlarından haberdar olmak için e-posta listemize katılın.",
+      emailPlaceholder: "E-posta adresiniz",
+      subscribe: "Abone Ol",
+      dateLocale: "tr-TR",
+    },
+    en: {
+      heroTitle: "Health Blog",
+      heroDescription: "Tips from our expert nurses about at-home care, patient support, and healthy living.",
+      all: "All",
+      noPosts: "No blog posts yet",
+      noPostsHint: "Add content from the admin panel.",
+      readMore: "Read More",
+      newsletterTitle: "Stay Informed",
+      newsletterDescription: "Subscribe to receive new articles and helpful healthcare tips.",
+      emailPlaceholder: "Email address",
+      subscribe: "Subscribe",
+      dateLocale: "en-US",
+    },
+    ru: {
+      heroTitle: "Медицинский блог",
+      heroDescription: "Советы наших медсестёр о домашнем уходе, поддержке пациентов и здоровом образе жизни.",
+      all: "Все",
+      noPosts: "Пока нет публикаций",
+      noPostsHint: "Добавьте записи через административную панель.",
+      readMore: "Читать далее",
+      newsletterTitle: "Получайте полезные советы",
+      newsletterDescription: "Подпишитесь, чтобы первыми узнавать о новых статьях и рекомендациях.",
+      emailPlaceholder: "Ваш e-mail",
+      subscribe: "Подписаться",
+      dateLocale: "ru-RU",
+    },
+    ar: {
+      heroTitle: "مدونة الصحة",
+      heroDescription: "نصائح من فريقنا التمريضي حول الرعاية المنزلية، دعم المرضى، ونمط الحياة الصحي.",
+      all: "الكل",
+      noPosts: "لا توجد مقالات حالياً",
+      noPostsHint: "يمكن إضافة المقالات من لوحة التحكم.",
+      readMore: "اقرأ المزيد",
+      newsletterTitle: "لا تفوّت نصائحنا الصحية",
+      newsletterDescription: "اشترك ليصلك كل جديد من المقالات والإرشادات الطبية.",
+      emailPlaceholder: "عنوان بريدك الإلكتروني",
+      subscribe: "اشترك الآن",
+      dateLocale: "ar-EG",
+    },
+  }[language];
+
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('Tümü');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [allCategories, setAllCategories] = useState<string[]>([]);
 
   useEffect(() => {
     fetchBlogs();
+    fetchCategories();
   }, []);
 
   const fetchBlogs = async () => {
@@ -37,9 +96,30 @@ export default function BlogPage() {
     }
   };
 
-  const categories = ['Tümü', ...Array.from(new Set(blogPosts.map(post => post.category)))];
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+      const categoryNames = data.map((cat: { name: string }) => cat.name);
+      setAllCategories(categoryNames);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      const postCategories = Array.from(new Set(blogPosts.map((post) => post.category)));
+      setAllCategories(postCategories);
+    }
+  };
 
-  const filteredPosts = selectedCategory === 'Tümü' 
+  const categories = allCategories.length > 0 ? allCategories : Array.from(new Set(blogPosts.map((post) => post.category)));
+
+  const getCategoryCount = (categoryName: string) => {
+    if (categoryName === "all") {
+      return blogPosts.length;
+    }
+    return blogPosts.filter((post) => post.category === categoryName).length;
+  };
+
+  const filteredPosts =
+    selectedCategory === "all"
     ? blogPosts 
     : blogPosts.filter(post => post.category === selectedCategory);
 
@@ -53,13 +133,8 @@ export default function BlogPage() {
       <section className="bg-gradient-to-r from-[#1e3a5f] to-[#2a4a6f] text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Sağlık Blog
-            </h1>
-            <p className="text-xl text-gray-200">
-              Evde sağlık bakımı, hasta bakımı ve sağlıklı yaşam hakkında 
-              uzman hemşirelerimizden ipuçları ve öneriler.
-            </p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{texts.heroTitle}</h1>
+            <p className="text-xl text-gray-200">{texts.heroDescription}</p>
           </div>
         </div>
       </section>
@@ -68,19 +143,23 @@ export default function BlogPage() {
       <section className="py-8 border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-[#14b8a6] text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {category} {category === 'Tümü' && `(${blogPosts.length})`}
-              </button>
-            ))}
+            {[
+              { label: texts.all, value: "all" },
+              ...categories.map((category) => ({ label: category, value: category })),
+            ].map((category) => {
+              const count = getCategoryCount(category.value);
+              return (
+                <button
+                  key={category.value}
+                  onClick={() => setSelectedCategory(category.value)}
+                  className={`px-6 py-2 rounded-full transition-colors ${
+                    selectedCategory === category.value ? "bg-[#14b8a6] text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {category.label} ({count})
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -99,8 +178,8 @@ export default function BlogPage() {
               <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <p className="text-gray-600 text-lg">Henüz blog yazısı yok</p>
-              <p className="text-gray-500 text-sm mt-2">Admin panelden blog ekleyebilirsiniz</p>
+              <p className="text-gray-600 text-lg">{texts.noPosts}</p>
+              <p className="text-gray-500 text-sm mt-2">{texts.noPostsHint}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -126,7 +205,7 @@ export default function BlogPage() {
                         {post.category}
                       </span>
                       <span className="text-gray-500">
-                        {new Date(post.createdAt).toLocaleDateString('tr-TR')}
+                        {new Date(post.createdAt).toLocaleDateString(texts.dateLocale)}
                       </span>
                     </div>
                     <h2 className="text-xl font-bold text-gray-800 mb-3 hover:text-[#14b8a6] transition-colors line-clamp-2">
@@ -147,7 +226,7 @@ export default function BlogPage() {
                         href={`/blog/${post.slug}`}
                         className="text-[#14b8a6] hover:text-[#0d9488] font-semibold inline-flex items-center gap-2"
                       >
-                        Devamını Oku
+                        {texts.readMore}
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
@@ -165,24 +244,19 @@ export default function BlogPage() {
       <section className="bg-gray-50 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Sağlık İpuçlarını Kaçırmayın
-            </h2>
-            <p className="text-gray-600 mb-8">
-              Yeni makalelerimizden ve sağlık ipuçlarından haberdar olmak için 
-              e-posta listemize katılın.
-            </p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">{texts.newsletterTitle}</h2>
+            <p className="text-gray-600 mb-8">{texts.newsletterDescription}</p>
             <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
                 type="email"
-                placeholder="E-posta adresiniz"
+                placeholder={texts.emailPlaceholder}
                 className="flex-1 px-6 py-3 rounded-lg border-2 border-gray-200 focus:border-[#14b8a6] focus:outline-none"
               />
               <button
                 type="submit"
                 className="bg-[#14b8a6] hover:bg-[#0d9488] text-white px-8 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap"
               >
-                Abone Ol
+                {texts.subscribe}
               </button>
             </form>
           </div>

@@ -8,7 +8,20 @@ export async function GET() {
       orderBy: { name: 'asc' }
     })
 
-    return NextResponse.json(categories)
+    // Her kategori için blog post sayısını ekle
+    const categoriesWithCount = await Promise.all(
+      categories.map(async (category) => {
+        const postCount = await prisma.blogPost.count({
+          where: { category: category.name, published: true }
+        })
+        return {
+          ...category,
+          postCount
+        }
+      })
+    )
+
+    return NextResponse.json(categoriesWithCount)
   } catch (error) {
     console.error('Get categories error:', error)
     return NextResponse.json(

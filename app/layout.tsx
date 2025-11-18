@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import FloatingContacts from "@/components/FloatingContacts";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import MaintenanceCheck from "@/components/MaintenanceCheck";
 
 export const metadata: Metadata = {
   title: "Nova Sağlık Hizmetleri - 7/24 Evde ve Klinik Sağlık Hizmeti",
-  description: "Profesyonel evde sağlık hizmetleri: Serum takma, enjeksiyon, hemşirelik hizmetleri, yaşlı bakımı ve daha fazlası. Uzman hemşirelerimizle 7/24 hizmetinizdeyiz. Güvenilir, uygun fiyatlı sağlık hizmeti.",
+  description: "Profesyonel evde sağlık hizmetleri: Serum takma, enjeksiyon, hemşirelik hizmetleri, yaşlı bakımı ve daha fazlası. Uzman hemşirelerimizle 7/24 hizmetinizdeyiz. Güvenilir, bütçe dostu ve şeffaf fiyatlandırılan sağlık hizmeti.",
   keywords: "evde sağlık hizmetleri, serum takma, enjeksiyon, hemşirelik hizmeti, hasta bakımı, yaşlı bakımı, evde hemşire, 7/24 sağlık hizmeti, İstanbul evde sağlık",
   authors: [{ name: "Nova Sağlık Hizmetleri" }],
   creator: "Nova Sağlık Hizmetleri",
@@ -63,8 +66,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>" />
         <meta name="theme-color" content="#1e3a5f" />
         <script
           type="application/ld+json"
@@ -111,7 +113,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <LanguageProvider>
+          <MaintenanceCheck>
+            {children}
+            <FloatingContacts />
+          </MaintenanceCheck>
+        </LanguageProvider>
+      </body>
     </html>
   );
 }

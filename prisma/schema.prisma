@@ -73,3 +73,10 @@ model Contact {
   updatedAt   DateTime @updatedAt
 }
 
+// Site Settings Model
+model SiteSettings {
+  id              String   @id @default("site-settings")
+  maintenanceMode Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+}
+

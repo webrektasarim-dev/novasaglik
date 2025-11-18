@@ -19,6 +19,11 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  font-size: 80%; /* %80 ölçek için */
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -27,10 +32,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+  margin: 0;
+  padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body > main {
+  flex: 1;
 }
 
 /* Medical Theme Animations */
@@ -71,6 +88,84 @@ html {
   }
   100% {
     background-position: 1000px 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scroll Animation Classes */
+.scroll-animate-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Mobile Only Scroll Animations */
+@media (max-width: 767px) {
+  .scroll-card-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .scroll-card-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .scroll-card-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-card-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .scroll-card-left,
+  .scroll-card-right {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -199,6 +294,103 @@ input:focus, textarea:focus, select:focus {
   @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
   background: linear-gradient(135deg, #14b8a6, #10b981);
   color: white;
+}
+
+/* Universal Module Cards */
+.module-card {
+  --module-accent: #14b8a6;
+  position: relative;
+  border-radius: 24px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  overflow: hidden;
+}
+
+.module-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(20, 184, 166, 0.18), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.module-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(14, 165, 233, 0.06));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.module-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(20, 184, 166, 0.5);
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.14);
+}
+
+.module-card:hover::before,
+.module-card:hover::after {
+  opacity: 1;
+}
+
+.module-card-dark {
+  position: relative;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.8);
+  color: #f8fafc;
+  overflow: hidden;
+  transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+.module-card-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.35), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.module-card-dark:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.module-card-dark:hover::before {
+  opacity: 1;
+}
+
+.module-divider {
+  width: 60px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #14b8a6, #0ea5e9);
+  margin: 0 auto;
+}
+
+/* Reveal Animations */
+@keyframes moduleFade {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.module-fade-up {
+  opacity: 0;
+  animation: moduleFade 0.7s ease forwards;
 }
 
 /* Stats Counter Animation */
