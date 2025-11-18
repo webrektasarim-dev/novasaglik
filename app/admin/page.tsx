@@ -153,6 +153,16 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-4">
+              <Link
+                href="/admin/change-password"
+                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                title="Şifre Değiştir"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                </svg>
+                Şifre Değiştir
+              </Link>
               <button
                 onClick={toggleMaintenance}
                 disabled={maintenanceLoading}

@@ -40,3 +40,14 @@ export async function createAdmin(email: string, password: string, name: string)
   })
 }
 
+export async function updatePassword(adminId: string, newPassword: string) {
+  const hashedPassword = await bcrypt.hash(newPassword, 10)
+  
+  return prisma.admin.update({
+    where: { id: adminId },
+    data: {
+      password: hashedPassword
+    }
+  })
+}
+
