@@ -1,31 +1,68 @@
 "use client";
 
-import { useEffect, useState, type TouchEvent } from "react";
-import Image, { StaticImageData } from "next/image";
-import img4 from "@/images/4.jpg";
-import img4_2 from "@/images/4-2.jpg";
-import img5 from "@/images/5.jpg";
-import img5_2 from "@/images/5-2.jpg";
-import img6 from "@/images/6.jpg";
-import img6_2 from "@/images/6-2.jpg";
-import img7 from "@/images/7.jpg";
-import img7_2 from "@/images/7-2.jpg";
-import img8 from "@/images/8.jpg";
-import img8_2 from "@/images/8-2.jpg";
-import img9 from "@/images/9.jpg";
-import img9_2 from "@/images/9-2.jpg";
-import img10 from "@/images/10.jpg";
-import img10_2 from "@/images/10-2.jpg";
-import img11 from "@/images/11.jpg";
-import img11_2 from "@/images/11-2.jpg";
+import { useEffect, useState, useMemo, type TouchEvent } from "react";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-const highlightSlides: StaticImageData[][] = [
-  [img4, img4_2, img5, img5_2],
-  [img6, img6_2, img7, img7_2],
-  [img8, img8_2, img9, img9_2],
-  [img10, img10_2, img11, img11_2],
+// Default Turkish images
+const defaultImages = [
+  "/images/4.jpg",
+  "/images/4-2.jpg",
+  "/images/5.jpg",
+  "/images/5-2.jpg",
+  "/images/6.jpg",
+  "/images/6-2.jpg",
+  "/images/7.jpg",
+  "/images/7-2.jpg",
+  "/images/8.jpg",
+  "/images/8-2.jpg",
+  "/images/9.jpg",
+  "/images/9-2.jpg",
+  "/images/10.jpg",
+  "/images/10-2.jpg",
+  "/images/11.jpg",
+  "/images/11-2.jpg",
+];
+
+// Russian images
+const russianImages = [
+  "/images/ru/IMG-20251119-WA0011.jpg",
+  "/images/ru/IMG-20251119-WA0012.jpg",
+  "/images/ru/IMG-20251119-WA0013.jpg",
+  "/images/ru/IMG-20251119-WA0014.jpg",
+  "/images/ru/IMG-20251119-WA0015.jpg",
+  "/images/ru/IMG-20251119-WA0016.jpg",
+  "/images/ru/IMG-20251119-WA0017.jpg",
+  "/images/ru/IMG-20251119-WA0018.jpg",
+  "/images/ru/IMG-20251119-WA0019.jpg",
+  "/images/ru/IMG-20251119-WA0020.jpg",
+  "/images/ru/IMG-20251119-WA0021.jpg",
+  "/images/ru/IMG-20251119-WA0022.jpg",
+  "/images/ru/IMG-20251119-WA0023.jpg",
+  "/images/ru/IMG-20251119-WA0024.jpg",
+  "/images/ru/IMG-20251119-WA0025.jpg",
+  "/images/ru/IMG-20251119-WA0026.jpg",
+];
+
+// Arabic images
+const arabicImages = [
+  "/images/ar/IMG-20251117-WA0043.jpg",
+  "/images/ar/IMG-20251117-WA0044.jpg",
+  "/images/ar/IMG-20251117-WA0045.jpg",
+  "/images/ar/IMG-20251117-WA0046.jpg",
+  "/images/ar/IMG-20251117-WA0047.jpg",
+  "/images/ar/IMG-20251117-WA0048.jpg",
+  "/images/ar/IMG-20251117-WA0049.jpg",
+  "/images/ar/IMG-20251117-WA0050.jpg",
+  "/images/ar/IMG-20251117-WA0051.jpg",
+  "/images/ar/IMG-20251117-WA0052.jpg",
+  "/images/ar/IMG-20251117-WA0053.jpg",
+  "/images/ar/IMG-20251117-WA0054.jpg",
+  "/images/ar/IMG-20251117-WA0055.jpg",
+  "/images/ar/IMG-20251117-WA0056.jpg",
+  "/images/ar/IMG-20251117-WA0057.jpg",
+  "/images/ar/IMG-20251117-WA0058.jpg",
 ];
 
 export default function Highlights() {
@@ -35,6 +72,26 @@ export default function Highlights() {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const { language } = useLanguage();
   const swipeThreshold = 50;
+
+  // Select images based on language
+  const selectedImages = useMemo(() => {
+    if (language === "ru") {
+      return russianImages;
+    } else if (language === "ar") {
+      return arabicImages;
+    }
+    return defaultImages;
+  }, [language]);
+
+  // Group images into slides (4 images per slide)
+  const highlightSlides = useMemo(() => {
+    const slides: string[][] = [];
+    for (let i = 0; i < selectedImages.length; i += 4) {
+      slides.push(selectedImages.slice(i, i + 4));
+    }
+    return slides;
+  }, [selectedImages]);
+
   const slideCount = highlightSlides.length;
 
   const nextSlide = () => {
@@ -44,6 +101,10 @@ export default function Highlights() {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slideCount) % slideCount);
   };
+
+  useEffect(() => {
+    setCurrentSlide(0); // Reset to first slide when language changes
+  }, [language]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -118,6 +179,7 @@ export default function Highlights() {
                           className="object-contain"
                           sizes="(max-width: 768px) 100vw, 50vw"
                           priority={index === 0 && innerIndex === 0}
+                          unoptimized
                         />
                       </div>
                     </div>
