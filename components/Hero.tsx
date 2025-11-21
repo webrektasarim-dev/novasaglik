@@ -1,22 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
-import slideImage1 from "@/images/1.jpg";
-import slideImage2 from "@/images/2.jpg";
-import slideImage3 from "@/images/3.jpg";
+import { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 type SlideLanguages = "tr" | "en" | "ru" | "ar";
 
 type SlideItem = {
-  image: StaticImageData;
+  image: string;
   texts: Record<SlideLanguages, { title: string; description: string }>;
 };
 
-const slides: SlideItem[] = [
+// Turkish slides (default)
+const turkishSlides: SlideItem[] = [
   {
-    image: slideImage1,
+    image: "/images/1.jpg",
     texts: {
       tr: {
         title: "Evde Sağlık Ekiplerimiz",
@@ -37,7 +35,7 @@ const slides: SlideItem[] = [
     },
   },
   {
-    image: slideImage2,
+    image: "/images/2.jpg",
     texts: {
       tr: {
         title: "Laboratuvar Destekleri",
@@ -58,7 +56,208 @@ const slides: SlideItem[] = [
     },
   },
   {
-    image: slideImage3,
+    image: "/images/3.jpg",
+    texts: {
+      tr: {
+        title: "Evde Rehabilitasyon",
+        description: "Fizik tedavi desteğiyle hareket özgürlüğünüzü geri kazanın.",
+      },
+      en: {
+        title: "Home Rehabilitation",
+        description: "Restore mobility with tailored physical therapy support.",
+      },
+      ru: {
+        title: "Домашняя реабилитация",
+        description: "Верните подвижность с помощью индивидуальной физиотерапии дома.",
+      },
+      ar: {
+        title: "إعادة التأهيل في المنزل",
+        description: "استعد نشاطك مع جلسات علاج طبيعي مخصصة في منزلك.",
+      },
+    },
+  },
+];
+
+// English slides
+const englishSlides: SlideItem[] = [
+  {
+    image: "/images/en/IMG-20251119-WA0043.jpg",
+    texts: {
+      tr: {
+        title: "Evde Sağlık Ekiplerimiz",
+        description: "Sertifikalı hemşire kadromuzla her yerde yanınızdayız.",
+      },
+      en: {
+        title: "In-Home Care Teams",
+        description: "Certified nurses providing wherever-you-are support.",
+      },
+      ru: {
+        title: "Команды домашнего ухода",
+        description: "Наши сертифицированные медсёстры рядом с вами в любом районе.",
+      },
+      ar: {
+        title: "فرق الرعاية المنزلية",
+        description: "ممرضات معتمدات إلى جوارك أينما كنت في المدينة.",
+      },
+    },
+  },
+  {
+    image: "/images/en/IMG-20251119-WA0047.jpg",
+    texts: {
+      tr: {
+        title: "Laboratuvar Destekleri",
+        description: "Kan alma ve hızlı sonuç süreçleri için mobil ekipmanlarımız.",
+      },
+      en: {
+        title: "Laboratory Support",
+        description: "Mobile equipment for blood draw and rapid lab results.",
+      },
+      ru: {
+        title: "Лабораторная поддержка",
+        description: "Мобильное оборудование для забора крови и быстрых результатов.",
+      },
+      ar: {
+        title: "دعم مختبر متنقل",
+        description: "معدات متنقلة لسحب العينات والحصول على نتائج سريعة.",
+      },
+    },
+  },
+  {
+    image: "/images/en/IMG-20251119-WA0037.jpg",
+    texts: {
+      tr: {
+        title: "Evde Rehabilitasyon",
+        description: "Fizik tedavi desteğiyle hareket özgürlüğünüzü geri kazanın.",
+      },
+      en: {
+        title: "Home Rehabilitation",
+        description: "Restore mobility with tailored physical therapy support.",
+      },
+      ru: {
+        title: "Домашняя реабилитация",
+        description: "Верните подвижность с помощью индивидуальной физиотерапии дома.",
+      },
+      ar: {
+        title: "إعادة التأهيل في المنزل",
+        description: "استعد نشاطك مع جلسات علاج طبيعي مخصصة في منزلك.",
+      },
+    },
+  },
+];
+
+// Russian slides
+const russianSlides: SlideItem[] = [
+  {
+    image: "/images/ru/IMG-20251119-WA0021.jpg",
+    texts: {
+      tr: {
+        title: "Evde Sağlık Ekiplerimiz",
+        description: "Sertifikalı hemşire kadromuzla her yerde yanınızdayız.",
+      },
+      en: {
+        title: "In-Home Care Teams",
+        description: "Certified nurses providing wherever-you-are support.",
+      },
+      ru: {
+        title: "Команды домашнего ухода",
+        description: "Наши сертифицированные медсёстры рядом с вами в любом районе.",
+      },
+      ar: {
+        title: "فرق الرعاية المنزلية",
+        description: "ممرضات معتمدات إلى جوارك أينما كنت في المدينة.",
+      },
+    },
+  },
+  {
+    image: "/images/ru/IMG-20251119-WA0017.jpg",
+    texts: {
+      tr: {
+        title: "Laboratuvar Destekleri",
+        description: "Kan alma ve hızlı sonuç süreçleri için mobil ekipmanlarımız.",
+      },
+      en: {
+        title: "Laboratory Support",
+        description: "Mobile equipment for blood draw and rapid lab results.",
+      },
+      ru: {
+        title: "Лабораторная поддержка",
+        description: "Мобильное оборудование для забора крови и быстрых результатов.",
+      },
+      ar: {
+        title: "دعم مختبر متنقل",
+        description: "معدات متنقلة لسحب العينات والحصول على نتائج سريعة.",
+      },
+    },
+  },
+  {
+    image: "/images/ru/IMG-20251119-WA0023.jpg",
+    texts: {
+      tr: {
+        title: "Evde Rehabilitasyon",
+        description: "Fizik tedavi desteğiyle hareket özgürlüğünüzü geri kazanın.",
+      },
+      en: {
+        title: "Home Rehabilitation",
+        description: "Restore mobility with tailored physical therapy support.",
+      },
+      ru: {
+        title: "Домашняя реабилитация",
+        description: "Верните подвижность с помощью индивидуальной физиотерапии дома.",
+      },
+      ar: {
+        title: "إعادة التأهيل في المنزل",
+        description: "استعد نشاطك مع جلسات علاج طبيعي مخصصة في منزلك.",
+      },
+    },
+  },
+];
+
+// Arabic slides
+const arabicSlides: SlideItem[] = [
+  {
+    image: "/images/ar/IMG-20251117-WA0051.jpg",
+    texts: {
+      tr: {
+        title: "Evde Sağlık Ekiplerimiz",
+        description: "Sertifikalı hemşire kadromuzla her yerde yanınızdayız.",
+      },
+      en: {
+        title: "In-Home Care Teams",
+        description: "Certified nurses providing wherever-you-are support.",
+      },
+      ru: {
+        title: "Команды домашнего ухода",
+        description: "Наши сертифицированные медсёстры рядом с вами в любом районе.",
+      },
+      ar: {
+        title: "فرق الرعاية المنزلية",
+        description: "ممرضات معتمدات إلى جوارك أينما كنت في المدينة.",
+      },
+    },
+  },
+  {
+    image: "/images/ar/IMG-20251117-WA0049.jpg",
+    texts: {
+      tr: {
+        title: "Laboratuvar Destekleri",
+        description: "Kan alma ve hızlı sonuç süreçleri için mobil ekipmanlarımız.",
+      },
+      en: {
+        title: "Laboratory Support",
+        description: "Mobile equipment for blood draw and rapid lab results.",
+      },
+      ru: {
+        title: "Лабораторная поддержка",
+        description: "Мобильное оборудование для забора крови и быстрых результатов.",
+      },
+      ar: {
+        title: "دعم مختبر متنقل",
+        description: "معدات متنقلة لسحب العينات والحصول على نتائج سريعة.",
+      },
+    },
+  },
+  {
+    image: "/images/ar/IMG-20251117-WA0046.jpg",
     texts: {
       tr: {
         title: "Evde Rehabilitasyon",
@@ -103,12 +302,28 @@ export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { language } = useLanguage();
 
+  // Select slides based on language
+  const slides = useMemo(() => {
+    if (language === "en") {
+      return englishSlides;
+    } else if (language === "ru") {
+      return russianSlides;
+    } else if (language === "ar") {
+      return arabicSlides;
+    }
+    return turkishSlides;
+  }, [language]);
+
+  useEffect(() => {
+    setCurrentSlide(0); // Reset to first slide when language changes
+  }, [language]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [slides.length]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -218,12 +433,12 @@ export default function Hero() {
               </a>
               <a
                 href="tel:+905334866111"
-                className="bg-white text-[#1e3a5f] px-10 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all shadow-lg flex items-center justify-center gap-3 text-base md:text-lg w-full"
+                className="bg-white text-[#1e3a5f] px-10 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all shadow-lg flex items-center justify-center gap-3 text-base md:text-lg w-full whitespace-nowrap"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                +90 533 486 61 11
+                <span className="whitespace-nowrap">+90 533 486 61 11</span>
               </a>
             </div>
           </div>
@@ -232,13 +447,14 @@ export default function Hero() {
           <div className="relative w-full md:w-auto rounded-none md:rounded-[32px] bg-transparent md:bg-black/20 border border-transparent md:border-white/10 shadow-2xl overflow-hidden -mx-4 md:mx-0">
             <div className="relative h-[420px] sm:h-[460px] md:h-[420px] lg:h-[460px] w-full bg-black/10">
               <Image
-                key={slideText.title}
+                key={`${language}-${currentSlide}`}
                 src={slides[currentSlide].image}
                 alt={slideText.title}
                 fill
                 className="object-contain transition-opacity duration-700"
                 sizes="100vw"
                 priority
+                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
