@@ -23,6 +23,37 @@ const defaultImages = [
   "/images/10-2.jpg",
   "/images/11.jpg",
   "/images/11-2.jpg",
+  "/images/IMG-20251121-WA0001.jpg",
+  "/images/IMG-20251121-WA0003.jpg",
+  "/images/IMG-20251121-WA0004.jpg",
+  "/images/IMG-20251121-WA0010.jpg",
+];
+
+// English images
+const englishImages = [
+  "/images/en/IMG-20251119-WA0032.jpg",
+  "/images/en/IMG-20251119-WA0033.jpg",
+  "/images/en/IMG-20251119-WA0034.jpg",
+  "/images/en/IMG-20251119-WA0035.jpg",
+  "/images/en/IMG-20251119-WA0036.jpg",
+  "/images/en/IMG-20251119-WA0037.jpg",
+  "/images/en/IMG-20251119-WA0038.jpg",
+  "/images/en/IMG-20251119-WA0039.jpg",
+  "/images/en/IMG-20251119-WA0040.jpg",
+  "/images/en/IMG-20251119-WA0041.jpg",
+  "/images/en/IMG-20251119-WA0042.jpg",
+  "/images/en/IMG-20251119-WA0043.jpg",
+  "/images/en/IMG-20251119-WA0044.jpg",
+  "/images/en/IMG-20251119-WA0045.jpg",
+  "/images/en/IMG-20251119-WA0046.jpg",
+  "/images/en/IMG-20251119-WA0047.jpg",
+  "/images/en/IMG-20251119-WA0048.jpg",
+  "/images/en/IMG-20251119-WA0049.jpg",
+  "/images/en/IMG-20251119-WA0050.jpg",
+  "/images/en/IMG-20251121-WA0005.jpg",
+  "/images/en/IMG-20251121-WA0007.jpg",
+  "/images/en/IMG-20251121-WA0008.jpg",
+  "/images/en/IMG-20251121-WA0014.jpg",
 ];
 
 // Russian images
@@ -43,6 +74,12 @@ const russianImages = [
   "/images/ru/IMG-20251119-WA0024.jpg",
   "/images/ru/IMG-20251119-WA0025.jpg",
   "/images/ru/IMG-20251119-WA0026.jpg",
+  "/images/ru/IMG-20251119-WA0027.jpg",
+  "/images/ru/IMG-20251119-WA0028.jpg",
+  "/images/ru/IMG-20251119-WA0029.jpg",
+  "/images/ru/IMG-20251121-WA0002.jpg",
+  "/images/ru/IMG-20251121-WA0013.jpg",
+  "/images/ru/IMG-20251121-WA0015.jpg",
 ];
 
 // Arabic images
@@ -63,6 +100,12 @@ const arabicImages = [
   "/images/ar/IMG-20251117-WA0056.jpg",
   "/images/ar/IMG-20251117-WA0057.jpg",
   "/images/ar/IMG-20251117-WA0058.jpg",
+  "/images/ar/IMG-20251117-WA0059.jpg",
+  "/images/ar/IMG-20251117-WA0060.jpg",
+  "/images/ar/IMG-20251121-WA0006.jpg",
+  "/images/ar/IMG-20251121-WA0009.jpg",
+  "/images/ar/IMG-20251121-WA0011.jpg",
+  "/images/ar/IMG-20251121-WA0012.jpg",
 ];
 
 export default function Highlights() {
@@ -75,7 +118,9 @@ export default function Highlights() {
 
   // Select images based on language
   const selectedImages = useMemo(() => {
-    if (language === "ru") {
+    if (language === "en") {
+      return englishImages;
+    } else if (language === "ru") {
       return russianImages;
     } else if (language === "ar") {
       return arabicImages;
