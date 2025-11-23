@@ -16,14 +16,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://novasaglik.com'),
+  metadataBase: new URL('https://www.novasaglikhizmeti.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: "Nova Sağlık Hizmetleri - 7/24 Evde ve Klinik Sağlık Hizmeti",
     description: "Profesyonel evde sağlık hizmetleri: Serum takma, enjeksiyon, hemşirelik hizmetleri ve daha fazlası. Uzman hemşirelerimizle 7/24 hizmetinizdeyiz.",
-    url: 'https://novasaglik.com',
+    url: 'https://www.novasaglikhizmeti.com',
     siteName: 'Nova Sağlık Hizmetleri',
     images: [
       {
@@ -76,7 +76,7 @@ export default function RootLayout({
               "@type": "MedicalBusiness",
               "name": "Nova Sağlık Hizmetleri",
               "description": "7/24 Evde ve Klinik Sağlık Hizmeti",
-              "url": "https://novasaglik.com",
+              "url": "https://www.novasaglikhizmeti.com",
               "telephone": "+90-533-486-61-11",
               "address": {
                 "@type": "PostalAddress",
@@ -103,7 +103,7 @@ export default function RootLayout({
                 "closes": "23:59"
               },
               "priceRange": "$$",
-              "image": "https://novasaglik.com/og-image.jpg",
+              "image": "https://www.novasaglikhizmeti.com/og-image.jpg",
               "sameAs": [
                 "https://facebook.com/novasaglik",
                 "https://instagram.com/novasaglik",

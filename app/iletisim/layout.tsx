@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "İletişim - Nova Sağlık Hizmetleri",
     description: "Bize ulaşın, size yardımcı olalım. 7/24 hizmetinizdeyiz.",
-    url: 'https://novasaglik.com/iletisim',
+    url: 'https://www.novasaglikhizmeti.com/iletisim',
   },
 };
 

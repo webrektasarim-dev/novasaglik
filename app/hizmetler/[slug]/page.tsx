@@ -243,7 +243,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: service.title,
       description: service.description,
-      url: `https://novasaglik.com/hizmetler/${slug}`,
+      url: `https://www.novasaglikhizmeti.com/hizmetler/${slug}`,
     },
   };
 }
