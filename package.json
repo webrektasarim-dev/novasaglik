@@ -39,6 +39,7 @@
     "typescript": "^5"
   },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.15",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "prisma": "^5.7.0",
