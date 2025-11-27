@@ -23,6 +23,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.22",
@@ -39,7 +40,6 @@
     "typescript": "^5"
   },
   "devDependencies": {
-    "@types/nodemailer": "^6.4.15",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "prisma": "^5.7.0",
