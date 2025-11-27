@@ -19,7 +19,7 @@ export default function IletisimPage() {
       emailLabel: "E-posta",
       emailHelp: "24 saat içinde yanıt",
       addressLabel: "Adres",
-      addressText: "Bakırköy, İstanbul · Türkiye",
+      addressText: "İstanbul",
       hoursLabel: "Çalışma Saatleri",
       hoursText: "Her Gün 24 Saat",
       hoursHelp: "Kesintisiz hizmet",
@@ -36,7 +36,7 @@ export default function IletisimPage() {
       messagePlaceholder: "Mesajınızı buraya yazın...",
       submit: "Mesajı Gönder",
       mapTitle: "Ofis Konumumuz",
-      mapSubtitle: "Bakırköy / İstanbul",
+      mapSubtitle: "İstanbul",
       faqTitle: "Sıkça Sorulan Sorular",
       faq: [
         {
@@ -79,7 +79,7 @@ export default function IletisimPage() {
       emailLabel: "Email",
       emailHelp: "Response within 24 hours",
       addressLabel: "Address",
-      addressText: "Bakırköy, Istanbul · Turkey",
+      addressText: "Istanbul",
       hoursLabel: "Working Hours",
       hoursText: "24/7 Service",
       hoursHelp: "Continuous support",
@@ -96,7 +96,7 @@ export default function IletisimPage() {
       messagePlaceholder: "Write your message here...",
       submit: "Send Message",
       mapTitle: "Our Office Location",
-      mapSubtitle: "Bakırköy / Istanbul",
+      mapSubtitle: "Istanbul",
       faqTitle: "Frequently Asked Questions",
       faq: [
         {
@@ -139,7 +139,7 @@ export default function IletisimPage() {
       emailLabel: "Email",
       emailHelp: "Ответ в течение 24 часов",
       addressLabel: "Адрес",
-      addressText: "Бакыркёй, Стамбул · Турция",
+      addressText: "Стамбул",
       hoursLabel: "Часы работы",
       hoursText: "24/7",
       hoursHelp: "Без перерывов",
@@ -156,7 +156,7 @@ export default function IletisimPage() {
       messagePlaceholder: "Напишите ваше сообщение...",
       submit: "Отправить",
       mapTitle: "Наш офис",
-      mapSubtitle: "Бакыркёй / Стамбул",
+      mapSubtitle: "Стамбул",
       faqTitle: "Часто задаваемые вопросы",
       faq: [
         { q: "В каких районах вы работаете?", a: "Мы обслуживаем все округа Стамбула и доступны 24/7 для срочных запросов." },
@@ -187,7 +187,7 @@ export default function IletisimPage() {
       emailLabel: "البريد الإلكتروني",
       emailHelp: "نرد خلال 24 ساعة",
       addressLabel: "العنوان",
-      addressText: "بكيركوي، إسطنبول · تركيا",
+      addressText: "إسطنبول",
       hoursLabel: "ساعات العمل",
       hoursText: "خدمة 24/7",
       hoursHelp: "دعم مستمر",
@@ -204,7 +204,7 @@ export default function IletisimPage() {
       messagePlaceholder: "اكتب رسالتك هنا...",
       submit: "إرسال الرسالة",
       mapTitle: "موقع مكتبنا",
-      mapSubtitle: "بكيركوي / إسطنبول",
+      mapSubtitle: "إسطنبول",
       faqTitle: "الأسئلة الشائعة",
       faq: [
         { q: "ما هي المناطق التي تغطونها؟", a: "نخدم جميع أحياء إسطنبول ونوفر دعماً عاجلاً على مدار الساعة." },
@@ -484,9 +484,9 @@ export default function IletisimPage() {
           </h2>
           <div className="h-96 bg-gray-300 rounded-xl overflow-hidden">
             <iframe
-              title="Bakırköy Konumu"
+              title="İstanbul Konumu"
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps?q=Bak%C4%B1rk%C3%B6y%20%C4%B0stanbul&output=embed"
+              src="https://www.google.com/maps?q=Istanbul%20Turkey&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0 }}

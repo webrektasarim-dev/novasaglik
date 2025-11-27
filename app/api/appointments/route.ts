@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendNotificationEmail } from '@/lib/email'
 
 // GET all appointments
 export async function GET(request: NextRequest) {
@@ -42,8 +43,29 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Email bildirimi gönder (opsiyonel - email servisi kurulduğunda aktif edilebilir)
-    // TODO: Email bildirimi ekle
+    await sendNotificationEmail({
+      subject: `Yeni Randevu Talebi - ${appointment.name}`,
+      text: `
+Yeni bir randevu talebi alındı:
+- İsim: ${appointment.name}
+- E-posta: ${appointment.email}
+- Telefon: ${appointment.phone}
+- Hizmet: ${appointment.service}
+- Tarih: ${appointment.date}
+- Saat: ${appointment.time}
+- Mesaj: ${appointment.message || '-'}
+      `.trim(),
+      html: `
+        <h2>Yeni Randevu Talebi</h2>
+        <p><strong>İsim:</strong> ${appointment.name}</p>
+        <p><strong>E-posta:</strong> ${appointment.email}</p>
+        <p><strong>Telefon:</strong> ${appointment.phone}</p>
+        <p><strong>Talep Edilen Hizmet:</strong> ${appointment.service}</p>
+        <p><strong>Tarih:</strong> ${appointment.date}</p>
+        <p><strong>Saat:</strong> ${appointment.time}</p>
+        ${appointment.message ? `<p><strong>Mesaj:</strong><br/>${appointment.message.replace(/\n/g, '<br>')}</p>` : ''}
+      `,
+    })
 
     return NextResponse.json({
       success: true,

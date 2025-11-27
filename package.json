@@ -29,6 +29,7 @@
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "next": "15.0.2",
+    "nodemailer": "^6.9.8",
     "postcss": "^8",
     "quill": "^2.0.3",
     "react": "^18",

@@ -15,7 +15,7 @@ export default function Header() {
 
   const content = {
     tr: {
-      location: "Bakırköy | İstanbul",
+      location: "İstanbul",
       nav: [
         { href: "/", label: "Ana Sayfa" },
         { href: "/hizmetler", label: "Hizmetler" },
@@ -27,7 +27,7 @@ export default function Header() {
       whatsappLabel: "WhatsApp",
     },
     en: {
-      location: "Bakırköy | Istanbul",
+      location: "Istanbul",
       nav: [
         { href: "/", label: "Home" },
         { href: "/hizmetler", label: "Services" },
@@ -39,7 +39,7 @@ export default function Header() {
       whatsappLabel: "WhatsApp",
     },
     ru: {
-      location: "Бакыркёй | Стамбул",
+      location: "Стамбул",
       nav: [
         { href: "/", label: "Главная" },
         { href: "/hizmetler", label: "Услуги" },
@@ -51,7 +51,7 @@ export default function Header() {
       whatsappLabel: "WhatsApp",
     },
     ar: {
-      location: "بكيركوي | إسطنبول",
+      location: "إسطنبول",
       nav: [
         { href: "/", label: "الرئيسية" },
         { href: "/hizmetler", label: "الخدمات" },

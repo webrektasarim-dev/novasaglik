@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendNotificationEmail } from '@/lib/email'
 
 // GET all contacts
 export async function GET(request: NextRequest) {
@@ -36,6 +37,28 @@ export async function POST(request: NextRequest) {
         message: data.message,
         status: 'new'
       }
+    })
+
+    // Send notification email
+    await sendNotificationEmail({
+      subject: `Yeni İletişim Mesajı - ${contact.name}`,
+      text: `
+Yeni iletişim mesajı alındı:
+- İsim: ${contact.name}
+- E-posta: ${contact.email}
+- Telefon: ${contact.phone}
+- Konu: ${contact.subject}
+- Mesaj: ${contact.message}
+      `.trim(),
+      html: `
+        <h2>Yeni İletişim Mesajı</h2>
+        <p><strong>İsim:</strong> ${contact.name}</p>
+        <p><strong>E-posta:</strong> ${contact.email}</p>
+        <p><strong>Telefon:</strong> ${contact.phone}</p>
+        <p><strong>Konu:</strong> ${contact.subject || '-'}</p>
+        <p><strong>Mesaj:</strong></p>
+        <p>${contact.message?.replace(/\n/g, '<br>') || '-'}</p>
+      `,
     })
 
     return NextResponse.json(contact)
