@@ -8,6 +8,7 @@ import { Color } from '@tiptap/extension-color';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface RichTextEditorProps {
@@ -18,8 +19,10 @@ interface RichTextEditorProps {
 
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [mounted, setMounted] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const isUpdatingFromProps = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -55,6 +58,13 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         openOnClick: false,
         HTMLAttributes: {
           class: 'text-[#14b8a6] underline hover:text-[#0d9488]',
+        },
+      }),
+      Image.configure({
+        inline: false,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'max-w-full h-auto rounded-lg my-4',
         },
       }),
     ],
@@ -304,6 +314,99 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           </button>
         </div>
 
+        {/* Image Upload */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*"
+            className="hidden"
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+
+              // Dosya boyutu kontrolü (5MB)
+              if (file.size > 5 * 1024 * 1024) {
+                alert('Dosya boyutu maksimum 5MB olmalıdır');
+                return;
+              }
+
+              setUploadingImage(true);
+
+              try {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const res = await fetch('/api/upload', {
+                  method: 'POST',
+                  body: formData
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.url) {
+                  // Görseli editor'e ekle
+                  editor.chain().focus().setImage({ src: data.url }).run();
+                } else {
+                  alert(data.error || 'Görsel yüklenirken hata oluştu');
+                }
+              } catch (error) {
+                console.error('Upload error:', error);
+                alert('Görsel yüklenirken hata oluştu');
+              } finally {
+                setUploadingImage(false);
+                // Input'u temizle
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = '';
+                }
+              }
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              // URL ile görsel ekleme seçeneği
+              const url = window.prompt('Görsel URL\'si girin veya dosya yüklemek için "Dosya" yazın:');
+              if (url) {
+                if (url.toLowerCase() === 'dosya' || url.toLowerCase() === 'file') {
+                  fileInputRef.current?.click();
+                } else {
+                  editor.chain().focus().setImage({ src: url }).run();
+                }
+              }
+            }}
+            disabled={uploadingImage}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('image') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            } ${uploadingImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+            title="Görsel Ekle"
+          >
+            {uploadingImage ? (
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingImage}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 ${
+              uploadingImage ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            title="Dosyadan Görsel Yükle"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+          </button>
+        </div>
+
         {/* Undo/Redo */}
         <div className="flex gap-1">
           <button
@@ -413,6 +516,21 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         }
         .ProseMirror s {
           text-decoration: line-through;
+        }
+        .ProseMirror img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+          margin: 1em 0;
+          cursor: pointer;
+          transition: opacity 0.2s;
+        }
+        .ProseMirror img:hover {
+          opacity: 0.9;
+        }
+        .ProseMirror img[data-selected] {
+          outline: 2px solid #14b8a6;
+          outline-offset: 2px;
         }
       `}</style>
     </div>
