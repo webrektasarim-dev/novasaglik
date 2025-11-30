@@ -49,10 +49,23 @@ export default function BlogsManagement() {
       });
 
       if (res.ok) {
+        // Başarılı silme - listeyi güncelle
         fetchBlogs();
+      } else {
+        // Hata durumunu kontrol et
+        const errorData = await res.json().catch(() => ({ error: 'Blog silinirken hata oluştu' }));
+        
+        if (res.status === 404) {
+          // Blog zaten silinmiş - listeyi güncelle
+          alert('Blog zaten silinmiş. Liste güncelleniyor...');
+          fetchBlogs();
+        } else {
+          alert(errorData.error || 'Blog silinirken hata oluştu');
+        }
       }
     } catch (error) {
       console.error('Error deleting blog:', error);
+      alert('Blog silinirken bir hata oluştu');
     }
   };
 
