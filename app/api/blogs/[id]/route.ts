@@ -35,25 +35,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Request body size kontrolü (Vercel limit: 4.5MB)
-    const contentLength = request.headers.get('content-length')
-    if (contentLength && parseInt(contentLength) > 4 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: 'İçerik çok büyük. Lütfen görselleri URL olarak kullanın veya içeriği kısaltın.' },
-        { status: 413 }
-      )
-    }
-
     const { id } = await params;
     const data = await request.json()
-
-    // Content içindeki base64 görselleri kontrol et
-    if (data.content && data.content.length > 3 * 1024 * 1024) {
-      const base64ImageCount = (data.content.match(/data:image[^"']+/g) || []).length
-      if (base64ImageCount > 0) {
-        console.warn(`Blog içeriğinde ${base64ImageCount} adet base64 görsel tespit edildi. İçerik boyutu: ${(data.content.length / 1024 / 1024).toFixed(2)}MB`)
-      }
-    }
 
     const blog = await prisma.blogPost.update({
       where: { id },
@@ -71,10 +54,10 @@ export async function PUT(
   } catch (error: any) {
     console.error('Update blog error:', error)
     
-    // 413 hatası için özel mesaj
-    if (error.message?.includes('413') || error.message?.includes('too large')) {
+    // 413 hatası için özel mesaj (Vercel limit aşılırsa)
+    if (error.message?.includes('413') || error.message?.includes('too large') || error.message?.includes('PayloadTooLarge')) {
       return NextResponse.json(
-        { error: 'İçerik çok büyük. Lütfen görselleri URL olarak kullanın veya içeriği kısaltın. Base64 görseller yerine URL kullanmanız önerilir.' },
+        { error: 'İçerik çok büyük. Lütfen içeriği kısaltın veya görselleri optimize edin.' },
         { status: 413 }
       )
     }
