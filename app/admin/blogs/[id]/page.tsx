@@ -75,6 +75,27 @@ export default function EditBlog({ params }: { params: Promise<{ id: string }> }
     setLoading(true);
 
     try {
+      // İçerik boyutu kontrolü (4MB limit)
+      const contentSize = new Blob([formData.content]).size;
+      if (contentSize > 3.5 * 1024 * 1024) {
+        const base64Images = (formData.content.match(/data:image[^"']+/g) || []).length;
+        if (base64Images > 0) {
+          const confirm = window.confirm(
+            `İçerik çok büyük (${(contentSize / 1024 / 1024).toFixed(2)}MB). ` +
+            `İçerikte ${base64Images} adet base64 görsel var. ` +
+            `Görselleri URL olarak kullanmanız önerilir. Yine de kaydetmek istiyor musunuz?`
+          );
+          if (!confirm) {
+            setLoading(false);
+            return;
+          }
+        } else {
+          alert('İçerik çok büyük. Lütfen içeriği kısaltın.');
+          setLoading(false);
+          return;
+        }
+      }
+
       const res = await fetch(`/api/blogs/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -84,7 +105,8 @@ export default function EditBlog({ params }: { params: Promise<{ id: string }> }
       if (res.ok) {
         router.push('/admin/blogs');
       } else {
-        alert('Blog güncellenirken hata oluştu');
+        const errorData = await res.json().catch(() => ({ error: 'Blog güncellenirken hata oluştu' }));
+        alert(errorData.error || 'Blog güncellenirken hata oluştu');
       }
     } catch (error) {
       console.error('Error:', error);
