@@ -45,7 +45,7 @@ export default function NewBlog() {
   };
 
 
-  // Base64 görselleri optimize et
+  // Base64 görselleri optimize et - daha agresif optimizasyon
   const optimizeBase64Images = async (html: string): Promise<string> => {
     const base64Regex = /data:image\/([^;]+);base64,([^"'>]+)/g;
     let optimizedHtml = html;
@@ -63,10 +63,10 @@ export default function NewBlog() {
           img.src = fullMatch;
         });
 
-        // Canvas ile optimize et
+        // Canvas ile optimize et - daha küçük boyutlar
         const canvas = document.createElement('canvas');
-        const maxWidth = 1200; // Maksimum genişlik
-        const maxHeight = 800; // Maksimum yükseklik
+        const maxWidth = 800; // Daha küçük maksimum genişlik
+        const maxHeight = 600; // Daha küçük maksimum yükseklik
         let width = img.width;
         let height = img.height;
 
@@ -88,15 +88,17 @@ export default function NewBlog() {
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          // JPEG için 0.85 kalite, PNG için 0.9 kalite
-          const quality = imageType === 'png' ? 0.9 : 0.85;
+          // Daha düşük kalite - JPEG için 0.7, PNG için 0.8
+          const quality = imageType === 'png' ? 0.8 : 0.7;
           const optimizedBase64 = canvas.toDataURL(`image/${imageType}`, quality);
           
           // Orijinal base64'i optimize edilmiş versiyonla değiştir
           optimizedHtml = optimizedHtml.replace(fullMatch, optimizedBase64);
         }
       } catch (error) {
-        console.warn('Görsel optimize edilemedi, orijinal kullanılıyor:', error);
+        console.warn('Görsel optimize edilemedi, placeholder kullanılıyor:', error);
+        // Optimize edilemezse görseli placeholder ile değiştir
+        optimizedHtml = optimizedHtml.replace(fullMatch, 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlPC90ZXh0Pjwvc3ZnPg==');
       }
     }
 
@@ -113,7 +115,18 @@ export default function NewBlog() {
       const base64Images = (formData.content.match(/data:image[^"']+/g) || []).length;
       
       if (base64Images > 0) {
+        console.log(`${base64Images} adet görsel optimize ediliyor...`);
         optimizedContent = await optimizeBase64Images(formData.content);
+        
+        // Optimize edilmiş içeriğin boyutunu kontrol et
+        const optimizedSize = new Blob([optimizedContent]).size;
+        const originalSize = new Blob([formData.content]).size;
+        console.log(`Orijinal: ${(originalSize / 1024 / 1024).toFixed(2)}MB, Optimize: ${(optimizedSize / 1024 / 1024).toFixed(2)}MB`);
+        
+        // Hala çok büyükse uyar
+        if (optimizedSize > 3.5 * 1024 * 1024) {
+          alert(`Uyarı: İçerik hala büyük (${(optimizedSize / 1024 / 1024).toFixed(2)}MB). Bazı görseller kaldırılmış olabilir.`);
+        }
       }
 
       // Optimize edilmiş içerikle kaydet
