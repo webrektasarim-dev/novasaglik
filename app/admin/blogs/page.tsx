@@ -30,7 +30,13 @@ export default function BlogsManagement() {
         ? '/api/blogs'
         : `/api/blogs?published=${filter === 'published'}`;
       
-      const res = await fetch(url);
+      // Cache bypass - her zaman fresh data çek
+      const res = await fetch(url, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
       const data = await res.json();
       setBlogs(data);
     } catch (error) {

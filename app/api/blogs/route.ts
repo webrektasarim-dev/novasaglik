@@ -26,8 +26,15 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     })
 
+    // Admin paneli için cache yok, her zaman fresh data
+    const isAdmin = request.headers.get('referer')?.includes('/admin');
+    
     return NextResponse.json(blogs, {
-      headers: {
+      headers: isAdmin ? {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      } : {
         'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300'
       }
     })

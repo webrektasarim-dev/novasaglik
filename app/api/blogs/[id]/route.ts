@@ -97,6 +97,12 @@ export async function DELETE(
     return NextResponse.json({ 
       success: true,
       message: 'Blog başarıyla silindi'
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     })
   } catch (error: any) {
     console.error('Delete blog error:', error)
