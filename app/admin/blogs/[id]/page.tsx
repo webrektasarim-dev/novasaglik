@@ -322,14 +322,39 @@ export default function EditBlog({ params }: { params: Promise<{ id: string }> }
               <div className="mt-4">
                 <p className="text-sm text-gray-600 mb-2 font-semibold">📸 Görsel Önizleme:</p>
                 <div className="relative w-full h-64 bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                    onError={() => setImagePreview('')}
-                  />
+                  {uploadingImage ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#14b8a6] mx-auto mb-2"></div>
+                        <p className="text-sm text-gray-600">Yükleniyor...</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => {
+                        setImagePreview('');
+                        alert('Görsel yüklenemedi');
+                      }}
+                    />
+                  )}
                 </div>
-                <p className="text-xs text-gray-500 mt-2">Görsel Yolu: {formData.image}</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  {formData.image && (
+                    <>
+                      Görsel: {formData.image.startsWith('data:') ? 'Base64 formatında' : formData.image.length > 80 ? formData.image.substring(0, 80) + '...' : formData.image}
+                    </>
+                  )}
+                </p>
+                {formData.image?.startsWith('data:') && (
+                  <p className="text-xs text-yellow-600 mt-1">
+                    ⚠️ Base64 formatında görsel. Büyük dosyalar performansı etkileyebilir. URL kullanmanız önerilir.
+                  </p>
+                )}
               </div>
             )}
           </div>
