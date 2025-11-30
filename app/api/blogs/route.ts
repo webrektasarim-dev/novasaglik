@@ -26,7 +26,11 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     })
 
-    return NextResponse.json(blogs)
+    return NextResponse.json(blogs, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300'
+      }
+    })
   } catch (error) {
     console.error('Get blogs error:', error)
     return NextResponse.json(

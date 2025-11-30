@@ -80,34 +80,32 @@ export default function BlogPage() {
   const [allCategories, setAllCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchBlogs();
-    fetchCategories();
-  }, []);
-
-  const fetchBlogs = async () => {
-    try {
-      const res = await fetch('/api/blogs?published=true');
-      const data = await res.json();
-      setBlogPosts(data);
-    } catch (error) {
-      console.error('Error fetching blogs:', error);
-    } finally {
+    // Paralel fetch - daha hızlı yükleme
+    Promise.all([
+      fetch('/api/blogs?published=true', { 
+        cache: 'force-cache',
+        next: { revalidate: 60 } // 60 saniye cache
+      }).then(res => res.json()),
+      fetch("/api/categories", { 
+        cache: 'force-cache',
+        next: { revalidate: 300 } // 5 dakika cache
+      }).then(res => res.json()).catch(() => [])
+    ]).then(([blogsData, categoriesData]) => {
+      setBlogPosts(blogsData);
+      if (Array.isArray(categoriesData) && categoriesData.length > 0) {
+        const categoryNames = categoriesData.map((cat: { name: string }) => cat.name);
+        setAllCategories(categoryNames);
+      } else {
+        // Fallback: bloglardan kategorileri çıkar
+        const postCategories = Array.from(new Set(blogsData.map((post: BlogPost) => post.category)));
+        setAllCategories(postCategories);
+      }
       setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch("/api/categories");
-      const data = await res.json();
-      const categoryNames = data.map((cat: { name: string }) => cat.name);
-      setAllCategories(categoryNames);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      const postCategories = Array.from(new Set(blogPosts.map((post) => post.category)));
-      setAllCategories(postCategories);
-    }
-  };
+    }).catch((error) => {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    });
+  }, []);
 
   const categories = allCategories.length > 0 ? allCategories : Array.from(new Set(blogPosts.map((post) => post.category)));
 

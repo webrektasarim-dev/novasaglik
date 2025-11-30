@@ -28,14 +28,17 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
 
   const fetchBlog = async () => {
     try {
-      const res = await fetch('/api/blogs?published=true');
-      const data = await res.json();
-      const foundBlog = data.find((b: BlogPost) => b.slug === slug);
+      // Slug'a göre direkt blog çek - çok daha hızlı
+      const res = await fetch(`/api/blogs/slug/${slug}`, {
+        cache: 'force-cache',
+        next: { revalidate: 60 } // 60 saniye cache
+      });
       
-      if (foundBlog) {
+      if (res.ok) {
+        const foundBlog = await res.json();
         setBlog(foundBlog);
-        // Increment view count
-        await fetch(`/api/blogs/${foundBlog.id}/view`, { method: 'POST' });
+        // Increment view count (async, blocking yapmıyor)
+        fetch(`/api/blogs/${foundBlog.id}/view`, { method: 'POST' }).catch(() => {});
       }
     } catch (error) {
       console.error('Error fetching blog:', error);
