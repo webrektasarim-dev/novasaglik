@@ -29,10 +29,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
   const fetchBlog = async () => {
     try {
       // Slug'a göre direkt blog çek - çok daha hızlı
-      const res = await fetch(`/api/blogs/slug/${slug}`, {
-        cache: 'force-cache',
-        next: { revalidate: 60 } // 60 saniye cache
-      });
+      const res = await fetch(`/api/blogs/slug/${slug}`);
       
       if (res.ok) {
         const foundBlog = await res.json();

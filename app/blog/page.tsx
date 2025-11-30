@@ -82,14 +82,8 @@ export default function BlogPage() {
   useEffect(() => {
     // Paralel fetch - daha hızlı yükleme
     Promise.all([
-      fetch('/api/blogs?published=true', { 
-        cache: 'force-cache',
-        next: { revalidate: 60 } // 60 saniye cache
-      }).then(res => res.json()),
-      fetch("/api/categories", { 
-        cache: 'force-cache',
-        next: { revalidate: 300 } // 5 dakika cache
-      }).then(res => res.json()).catch(() => [])
+      fetch('/api/blogs?published=true').then(res => res.json()),
+      fetch("/api/categories").then(res => res.json()).catch(() => [])
     ]).then(([blogsData, categoriesData]) => {
       setBlogPosts(blogsData);
       if (Array.isArray(categoriesData) && categoriesData.length > 0) {
