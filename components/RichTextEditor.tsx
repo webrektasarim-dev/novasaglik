@@ -1,14 +1,14 @@
 "use client";
 
-import { useMemo, useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
-
-// React Quill'i dynamic import ile yükle (SSR sorunlarını önlemek için)
-const ReactQuill = dynamic(() => import('react-quill'), { 
-  ssr: false,
-  loading: () => <div className="h-[400px] border-2 border-gray-200 rounded-lg flex items-center justify-center text-gray-500">Editör yükleniyor...</div>
-});
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
+import TextStyle from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Link from '@tiptap/extension-link';
+import { useState, useEffect } from 'react';
 
 interface RichTextEditorProps {
   value: string;
@@ -23,33 +23,45 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     setMounted(true);
   }, []);
 
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'font': [] }],
-        [{ 'size': [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'align': [] }],
-        ['link', 'image', 'video'],
-        ['clean']
-      ],
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3, 4, 5, 6],
+        },
+      }),
+      Placeholder.configure({
+        placeholder: placeholder || "İçeriğinizi buraya yazın...",
+      }),
+      TextStyle,
+      Color,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'text-[#14b8a6] underline hover:text-[#0d9488]',
+        },
+      }),
+    ],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
     },
-    clipboard: {
-      matchVisual: false,
-    }
-  }), []);
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] p-4',
+      },
+    },
+  });
 
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'color', 'background',
-    'align',
-    'link', 'image', 'video'
-  ];
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [value, editor]);
 
   if (!mounted) {
     return (
@@ -59,62 +71,320 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     );
   }
 
+  if (!editor) {
+    return null;
+  }
+
   return (
-    <div className="border-2 border-gray-200 rounded-lg overflow-hidden focus-within:border-[#14b8a6] transition-colors">
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={onChange}
-        modules={modules}
-        formats={formats}
-        placeholder={placeholder || "İçeriğinizi buraya yazın..."}
-        style={{
-          minHeight: '400px',
-        }}
-        className="bg-white"
-      />
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden focus-within:border-[#14b8a6] transition-colors bg-white">
+      {/* Toolbar */}
+      <div className="bg-gray-50 border-b border-gray-200 p-3 flex flex-wrap gap-2">
+        {/* Text Formatting */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('bold') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Kalın"
+          >
+            <strong>B</strong>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('italic') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="İtalik"
+          >
+            <em>I</em>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('underline') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Altı Çizili"
+          >
+            <u>U</u>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('strike') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Üstü Çizili"
+          >
+            <s>S</s>
+          </button>
+        </div>
+
+        {/* Headings */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors text-sm ${
+              editor.isActive('heading', { level: 1 }) ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Başlık 1"
+          >
+            H1
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors text-sm ${
+              editor.isActive('heading', { level: 2 }) ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Başlık 2"
+          >
+            H2
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors text-sm ${
+              editor.isActive('heading', { level: 3 }) ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Başlık 3"
+          >
+            H3
+          </button>
+        </div>
+
+        {/* Lists */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('bulletList') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Madde İşareti"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('orderedList') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Numaralı Liste"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Blockquote */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('blockquote') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Alıntı"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Code */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleCode().run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('code') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Kod"
+          >
+            &lt;/&gt;
+          </button>
+        </div>
+
+        {/* Text Align */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive({ textAlign: 'left' }) ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Sola Hizala"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive({ textAlign: 'center' }) ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Ortala"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive({ textAlign: 'right' }) ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Sağa Hizala"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Link */}
+        <div className="flex gap-1 border-r border-gray-300 pr-2 mr-2">
+          <button
+            type="button"
+            onClick={() => {
+              const url = window.prompt('Link URL\'si girin:');
+              if (url) {
+                editor.chain().focus().setLink({ href: url }).run();
+              }
+            }}
+            className={`px-3 py-1.5 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('link') ? 'bg-[#14b8a6] text-white' : 'text-gray-700'
+            }`}
+            title="Link Ekle"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Undo/Redo */}
+        <div className="flex gap-1">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().undo().run()}
+            disabled={!editor.can().undo()}
+            className="px-3 py-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Geri Al"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().redo().run()}
+            disabled={!editor.can().redo()}
+            className="px-3 py-1.5 rounded hover:bg-gray-200 transition-colors text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Yinele"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Editor Content */}
+      <div className="min-h-[400px] max-h-[600px] overflow-y-auto">
+        <EditorContent editor={editor} />
+      </div>
+
       <style jsx global>{`
-        .ql-container {
-          font-size: 16px;
+        .ProseMirror {
+          outline: none;
           min-height: 400px;
+          padding: 16px;
+          font-size: 16px;
+          line-height: 1.6;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
             'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
         }
-        .ql-editor {
-          min-height: 400px;
+        .ProseMirror p {
+          margin: 0.75em 0;
         }
-        .ql-editor.ql-blank::before {
-          font-style: normal;
+        .ProseMirror p.is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          float: left;
           color: #9ca3af;
+          pointer-events: none;
+          height: 0;
         }
-        .ql-toolbar {
-          background: #f9fafb;
-          border-bottom: 2px solid #e5e7eb;
-          padding: 12px;
+        .ProseMirror h1 {
+          font-size: 2em;
+          font-weight: bold;
+          margin: 0.5em 0;
         }
-        .ql-toolbar .ql-stroke {
-          stroke: #374151;
+        .ProseMirror h2 {
+          font-size: 1.5em;
+          font-weight: bold;
+          margin: 0.5em 0;
         }
-        .ql-toolbar .ql-fill {
-          fill: #374151;
+        .ProseMirror h3 {
+          font-size: 1.25em;
+          font-weight: bold;
+          margin: 0.5em 0;
         }
-        .ql-toolbar button:hover,
-        .ql-toolbar button:focus,
-        .ql-toolbar button.ql-active {
-          color: #14b8a6;
+        .ProseMirror ul, .ProseMirror ol {
+          padding-left: 1.5em;
+          margin: 0.5em 0;
         }
-        .ql-toolbar button:hover .ql-stroke,
-        .ql-toolbar button:focus .ql-stroke,
-        .ql-toolbar button.ql-active .ql-stroke {
-          stroke: #14b8a6;
+        .ProseMirror blockquote {
+          border-left: 4px solid #14b8a6;
+          padding-left: 1em;
+          margin: 1em 0;
+          font-style: italic;
+          color: #6b7280;
         }
-        .ql-toolbar button:hover .ql-fill,
-        .ql-toolbar button:focus .ql-fill,
-        .ql-toolbar button.ql-active .ql-fill {
-          fill: #14b8a6;
+        .ProseMirror code {
+          background: #f3f4f6;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: 'Courier New', monospace;
+          font-size: 0.9em;
         }
-        .ql-container {
-          border-top: none;
+        .ProseMirror pre {
+          background: #1f2937;
+          color: #f9fafb;
+          padding: 1em;
+          border-radius: 8px;
+          overflow-x: auto;
+          margin: 1em 0;
+        }
+        .ProseMirror pre code {
+          background: transparent;
+          padding: 0;
+          color: inherit;
+        }
+        .ProseMirror strong {
+          font-weight: bold;
+        }
+        .ProseMirror em {
+          font-style: italic;
+        }
+        .ProseMirror u {
+          text-decoration: underline;
+        }
+        .ProseMirror s {
+          text-decoration: line-through;
         }
       `}</style>
     </div>
