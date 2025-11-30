@@ -1,11 +1,14 @@
 "use client";
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
 // React Quill'i dynamic import ile yükle (SSR sorunlarını önlemek için)
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill'), { 
+  ssr: false,
+  loading: () => <div className="h-[400px] border-2 border-gray-200 rounded-lg flex items-center justify-center text-gray-500">Editör yükleniyor...</div>
+});
 
 interface RichTextEditorProps {
   value: string;
@@ -14,6 +17,12 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const modules = useMemo(() => ({
     toolbar: {
       container: [
@@ -41,6 +50,14 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     'align',
     'link', 'image', 'video'
   ];
+
+  if (!mounted) {
+    return (
+      <div className="h-[400px] border-2 border-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+        Editör yükleniyor...
+      </div>
+    );
+  }
 
   return (
     <div className="border-2 border-gray-200 rounded-lg overflow-hidden focus-within:border-[#14b8a6] transition-colors">
