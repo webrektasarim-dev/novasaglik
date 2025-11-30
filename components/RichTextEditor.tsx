@@ -8,7 +8,7 @@ import { Color } from '@tiptap/extension-color';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Link from '@tiptap/extension-link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface RichTextEditorProps {
   value: string;
@@ -18,10 +18,22 @@ interface RichTextEditorProps {
 
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [mounted, setMounted] = useState(false);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const isUpdatingFromProps = useRef(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Debounced onChange handler
+  const handleUpdate = useCallback((html: string) => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+    debounceTimer.current = setTimeout(() => {
+      onChange(html);
+    }, 300); // 300ms debounce
+  }, [onChange]);
 
   const editor = useEditor({
     extensions: [
@@ -48,7 +60,9 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      if (!isUpdatingFromProps.current) {
+        handleUpdate(editor.getHTML());
+      }
     },
     editorProps: {
       attributes: {
@@ -59,9 +73,23 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value);
+      isUpdatingFromProps.current = true;
+      editor.commands.setContent(value, false); // false = don't emit update event
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isUpdatingFromProps.current = false;
+      }, 100);
     }
   }, [value, editor]);
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, []);
 
   if (!mounted) {
     return (

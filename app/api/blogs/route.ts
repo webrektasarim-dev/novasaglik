@@ -7,8 +7,22 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const published = searchParams.get('published')
     
+    // Blog listesi için content alanını çekme (performans için)
     const blogs = await prisma.blogPost.findMany({
       where: published ? { published: published === 'true' } : {},
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        category: true,
+        image: true,
+        published: true,
+        views: true,
+        createdAt: true,
+        updatedAt: true,
+        // content alanını çekmiyoruz - sadece listeleme için gerekli değil
+      },
       orderBy: { createdAt: 'desc' }
     })
 

@@ -77,9 +77,9 @@ export default function NewBlog() {
     }));
   };
 
-  const handleContentChange = (value: string) => {
+  const handleContentChange = useCallback((value: string) => {
     setFormData(prev => ({ ...prev, content: value }));
-  };
+  }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
