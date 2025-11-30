@@ -91,9 +91,54 @@ export default function NewBlog() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Dosya boyutu kontrolü (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Dosya boyutu maksimum 5MB olmalıdır');
+      return;
+    }
+
     setUploadingImage(true);
 
     try {
+      // Base64'e çevir ve optimize et (preview için küçük versiyon)
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64 = e.target?.result as string;
+        
+        // Preview için optimize edilmiş küçük versiyon oluştur
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxWidth = 800; // Preview için maksimum genişlik
+          const maxHeight = 600;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimizedBase64 = canvas.toDataURL(file.type, 0.8); // 80% kalite
+            setImagePreview(optimizedBase64);
+          }
+        };
+        img.src = base64;
+      };
+
+      // API'ye gönder
       const formData = new FormData();
       formData.append('file', file);
 
@@ -106,7 +151,13 @@ export default function NewBlog() {
 
       if (res.ok) {
         setFormData(prev => ({ ...prev, image: data.url }));
-        setImagePreview(data.url);
+        // API'den dönen URL'i kullan (base64 ise optimize edilmiş preview'ı kullan)
+        if (data.url.startsWith('data:')) {
+          // Base64 ise optimize edilmiş preview'ı kullan
+          reader.readAsDataURL(file);
+        } else {
+          setImagePreview(data.url);
+        }
       } else {
         alert(data.error || 'Görsel yüklenirken hata oluştu');
       }
@@ -238,14 +289,39 @@ export default function NewBlog() {
               <div className="mt-4">
                 <p className="text-sm text-gray-600 mb-2 font-semibold">📸 Görsel Önizleme:</p>
                 <div className="relative w-full h-64 bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                    onError={() => setImagePreview('')}
-                  />
+                  {uploadingImage ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#14b8a6] mx-auto mb-2"></div>
+                        <p className="text-sm text-gray-600">Yükleniyor...</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => {
+                        setImagePreview('');
+                        alert('Görsel yüklenemedi');
+                      }}
+                    />
+                  )}
                 </div>
-                <p className="text-xs text-gray-500 mt-2">Görsel Yolu: {formData.image}</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  {formData.image && (
+                    <>
+                      Görsel: {formData.image.startsWith('data:') ? 'Base64 formatında' : formData.image.length > 80 ? formData.image.substring(0, 80) + '...' : formData.image}
+                    </>
+                  )}
+                </p>
+                {formData.image?.startsWith('data:') && (
+                  <p className="text-xs text-yellow-600 mt-1">
+                    ⚠️ Base64 formatında görsel. Büyük dosyalar performansı etkileyebilir. URL kullanmanız önerilir.
+                  </p>
+                )}
               </div>
             )}
           </div>

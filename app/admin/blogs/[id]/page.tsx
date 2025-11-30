@@ -116,9 +116,54 @@ export default function EditBlog({ params }: { params: Promise<{ id: string }> }
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Dosya boyutu kontrolü (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Dosya boyutu maksimum 5MB olmalıdır');
+      return;
+    }
+
     setUploadingImage(true);
 
     try {
+      // Base64'e çevir ve optimize et (preview için küçük versiyon)
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64 = e.target?.result as string;
+        
+        // Preview için optimize edilmiş küçük versiyon oluştur
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxWidth = 800; // Preview için maksimum genişlik
+          const maxHeight = 600;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimizedBase64 = canvas.toDataURL(file.type, 0.8); // 80% kalite
+            setImagePreview(optimizedBase64);
+          }
+        };
+        img.src = base64;
+      };
+
+      // API'ye gönder
       const formData = new FormData();
       formData.append('file', file);
 
@@ -131,7 +176,13 @@ export default function EditBlog({ params }: { params: Promise<{ id: string }> }
 
       if (res.ok) {
         setFormData(prev => ({ ...prev, image: data.url }));
-        setImagePreview(data.url);
+        // API'den dönen URL'i kullan (base64 ise optimize edilmiş preview'ı kullan)
+        if (data.url.startsWith('data:')) {
+          // Base64 ise optimize edilmiş preview'ı kullan
+          reader.readAsDataURL(file);
+        } else {
+          setImagePreview(data.url);
+        }
       } else {
         alert(data.error || 'Görsel yüklenirken hata oluştu');
       }
