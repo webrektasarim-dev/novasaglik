@@ -70,36 +70,87 @@ export default function EditBlog({ params }: { params: Promise<{ id: string }> }
     }
   };
 
+  // Base64 görselleri optimize et
+  const optimizeBase64Images = async (html: string): Promise<string> => {
+    const base64Regex = /data:image\/([^;]+);base64,([^"'>]+)/g;
+    let optimizedHtml = html;
+    const matches = Array.from(html.matchAll(base64Regex));
+
+    for (const match of matches) {
+      const [fullMatch, imageType, base64Data] = match;
+      
+      try {
+        // Base64'ü Image'e çevir
+        const img = new Image();
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = fullMatch;
+        });
+
+        // Canvas ile optimize et
+        const canvas = document.createElement('canvas');
+        const maxWidth = 1200; // Maksimum genişlik
+        const maxHeight = 800; // Maksimum yükseklik
+        let width = img.width;
+        let height = img.height;
+
+        // Boyutlandır
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          // JPEG için 0.85 kalite, PNG için 0.9 kalite
+          const quality = imageType === 'png' ? 0.9 : 0.85;
+          const optimizedBase64 = canvas.toDataURL(`image/${imageType}`, quality);
+          
+          // Orijinal base64'i optimize edilmiş versiyonla değiştir
+          optimizedHtml = optimizedHtml.replace(fullMatch, optimizedBase64);
+        }
+      } catch (error) {
+        console.warn('Görsel optimize edilemedi, orijinal kullanılıyor:', error);
+      }
+    }
+
+    return optimizedHtml;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // İçerik boyutu kontrolü (4MB limit)
-      const contentSize = new Blob([formData.content]).size;
-      if (contentSize > 3.5 * 1024 * 1024) {
-        const base64Images = (formData.content.match(/data:image[^"']+/g) || []).length;
-        if (base64Images > 0) {
-          const confirm = window.confirm(
-            `İçerik çok büyük (${(contentSize / 1024 / 1024).toFixed(2)}MB). ` +
-            `İçerikte ${base64Images} adet base64 görsel var. ` +
-            `Görselleri URL olarak kullanmanız önerilir. Yine de kaydetmek istiyor musunuz?`
-          );
-          if (!confirm) {
-            setLoading(false);
-            return;
-          }
-        } else {
-          alert('İçerik çok büyük. Lütfen içeriği kısaltın.');
-          setLoading(false);
-          return;
-        }
+      // Base64 görselleri otomatik optimize et
+      let optimizedContent = formData.content;
+      const base64Images = (formData.content.match(/data:image[^"']+/g) || []).length;
+      
+      if (base64Images > 0) {
+        optimizedContent = await optimizeBase64Images(formData.content);
       }
+
+      // Optimize edilmiş içerikle kaydet
+      const dataToSave = {
+        ...formData,
+        content: optimizedContent
+      };
 
       const res = await fetch(`/api/blogs/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(dataToSave)
       });
 
       if (res.ok) {
