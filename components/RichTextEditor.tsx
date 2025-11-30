@@ -84,7 +84,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       isUpdatingFromProps.current = true;
-      editor.commands.setContent(value, false); // false = don't emit update event
+      editor.commands.setContent(value, { emitUpdate: false }); // Don't emit update event
       // Reset flag after a short delay
       setTimeout(() => {
         isUpdatingFromProps.current = false;
