@@ -91,7 +91,7 @@ export default function BlogPage() {
         setAllCategories(categoryNames);
       } else {
         // Fallback: bloglardan kategorileri çıkar
-        const postCategories = Array.from(new Set(blogsData.map((post: BlogPost) => post.category)));
+        const postCategories = Array.from(new Set(blogsData.map((post: BlogPost) => post.category))) as string[];
         setAllCategories(postCategories);
       }
       setLoading(false);
