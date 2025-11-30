@@ -76,15 +76,51 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    
+    // Önce blog'un var olup olmadığını kontrol et
+    const blog = await prisma.blogPost.findUnique({
+      where: { id }
+    })
+
+    if (!blog) {
+      return NextResponse.json(
+        { error: 'Blog not found' },
+        { status: 404 }
+      )
+    }
+
+    // Blog'u sil
     await prisma.blogPost.delete({
       where: { id }
     })
 
-    return NextResponse.json({ success: true })
-  } catch (error) {
+    return NextResponse.json({ 
+      success: true,
+      message: 'Blog başarıyla silindi'
+    })
+  } catch (error: any) {
     console.error('Delete blog error:', error)
+    
+    // Prisma hatalarını kontrol et
+    if (error.code === 'P2025') {
+      return NextResponse.json(
+        { error: 'Blog bulunamadı' },
+        { status: 404 }
+      )
+    }
+    
+    if (error.code === 'P2003') {
+      return NextResponse.json(
+        { error: 'Blog silinemiyor, bağlı kayıtlar var' },
+        { status: 409 }
+      )
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to delete blog' },
+      { 
+        error: 'Blog silinirken hata oluştu',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     )
   }
