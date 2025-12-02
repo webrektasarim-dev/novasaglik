@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.png', sizes: '48x48', type: 'image/png' },
+    ],
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
   openGraph: {
     title: "Nova Sağlık Hizmetleri - 7/24 Evde ve Klinik Sağlık Hizmeti",
     description: "Profesyonel evde sağlık hizmetleri: Serum takma, enjeksiyon, hemşirelik hizmetleri ve daha fazlası. Uzman hemşirelerimizle 7/24 hizmetinizdeyiz.",
@@ -66,7 +73,9 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
         <meta name="theme-color" content="#1e3a5f" />
         <script
           type="application/ld+json"

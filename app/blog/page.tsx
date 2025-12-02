@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+// Lazy load components
+const Header = dynamic(() => import("@/components/Header"), { ssr: true });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: true });
 
 interface BlogPost {
   id: string;

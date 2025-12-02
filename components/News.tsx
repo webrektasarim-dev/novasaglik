@@ -55,13 +55,14 @@ export default function News() {
 
   const fetchLatestBlogs = async () => {
     try {
-      const res = await fetch('/api/blogs?published=true');
+      const res = await fetch('/api/blogs?published=true&limit=2');
       const data = await res.json();
       // En son 2 blog yazısını al
-      const latestBlogs = data.slice(0, 2);
+      const latestBlogs = Array.isArray(data) ? data.slice(0, 2) : [];
       setNewsItems(latestBlogs);
     } catch (error) {
       console.error('Error fetching blogs:', error);
+      setNewsItems([]);
     } finally {
       setLoading(false);
     }

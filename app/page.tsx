@@ -1,13 +1,16 @@
+import dynamic from 'next/dynamic';
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import News from "@/components/News";
-import WhyUs from "@/components/WhyUs";
-import Highlights from "@/components/Highlights";
-import Testimonials from "@/components/Testimonials";
-import FAQ from "@/components/FAQ";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
+
+// Lazy load components - performans için
+const Services = dynamic(() => import("@/components/Services"), { ssr: true });
+const News = dynamic(() => import("@/components/News"), { ssr: true });
+const WhyUs = dynamic(() => import("@/components/WhyUs"), { ssr: true });
+const Highlights = dynamic(() => import("@/components/Highlights"), { ssr: true });
+const Testimonials = dynamic(() => import("@/components/Testimonials"), { ssr: true });
+const FAQ = dynamic(() => import("@/components/FAQ"), { ssr: true });
+const CTA = dynamic(() => import("@/components/CTA"), { ssr: true });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: true });
 
 export default function Home() {
   return (
