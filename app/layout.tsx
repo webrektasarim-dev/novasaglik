@@ -3,6 +3,7 @@ import "./globals.css";
 import FloatingContacts from "@/components/FloatingContacts";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import MaintenanceCheck from "@/components/MaintenanceCheck";
+import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
   title: "Nova Sağlık Hizmetleri - 7/24 Evde ve Klinik Sağlık Hizmeti",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'google-site-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'google-site-verification-code',
   },
 };
 
@@ -77,6 +78,29 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
         <meta name="theme-color" content="#1e3a5f" />
+        
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -127,6 +151,7 @@ export default function RootLayout({
           <MaintenanceCheck>
             {children}
             <FloatingContacts />
+            <Analytics />
           </MaintenanceCheck>
         </LanguageProvider>
       </body>
