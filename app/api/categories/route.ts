@@ -22,8 +22,24 @@ export async function GET() {
     )
 
     return NextResponse.json(categoriesWithCount || [])
-  } catch (error) {
+  } catch (error: any) {
     console.error('Get categories error:', error)
+    console.error('Error details:', {
+      message: error?.message,
+      code: error?.code,
+      name: error?.name,
+      meta: error?.meta
+    })
+    
+    // Veritabanı bağlantı hatası ise daha açıklayıcı hata döndür
+    if (error?.name === 'PrismaClientInitializationError' || error?.code === 'P1001') {
+      console.error('Database connection error detected')
+      return NextResponse.json(
+        { error: 'Veritabanı bağlantı hatası', details: error?.message },
+        { status: 503 }
+      )
+    }
+    
     // Hata durumunda boş array döndür ki frontend çökmesin
     return NextResponse.json([], {
       status: 200,

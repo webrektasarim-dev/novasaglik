@@ -86,25 +86,47 @@ export default function BlogPage() {
     // Paralel fetch - daha hızlı yükleme
     Promise.all([
       fetch('/api/blogs?published=true')
-        .then(res => {
+        .then(async res => {
           if (!res.ok) {
-            console.error('Blogs API error:', res.status);
+            const errorData = await res.json().catch(() => ({}));
+            console.error('Blogs API error:', res.status, errorData);
+            // 503 hatası (veritabanı bağlantı hatası) ise boş array döndür
+            if (res.status === 503) {
+              console.warn('Database connection issue - returning empty array');
+            }
             return [];
           }
-          return res.json();
+          const data = await res.json();
+          // Eğer error property varsa, boş array döndür
+          if (data.error) {
+            console.error('API returned error:', data.error);
+            return [];
+          }
+          return Array.isArray(data) ? data : [];
         })
-        .then(data => Array.isArray(data) ? data : [])
-        .catch(() => []),
+        .catch((error) => {
+          console.error('Blogs fetch error:', error);
+          return [];
+        }),
       fetch("/api/categories")
-        .then(res => {
+        .then(async res => {
           if (!res.ok) {
-            console.error('Categories API error:', res.status);
+            const errorData = await res.json().catch(() => ({}));
+            console.error('Categories API error:', res.status, errorData);
             return [];
           }
-          return res.json();
+          const data = await res.json();
+          // Eğer error property varsa, boş array döndür
+          if (data.error) {
+            console.error('API returned error:', data.error);
+            return [];
+          }
+          return Array.isArray(data) ? data : [];
         })
-        .then(data => Array.isArray(data) ? data : [])
-        .catch(() => [])
+        .catch((error) => {
+          console.error('Categories fetch error:', error);
+          return [];
+        })
     ]).then(([blogsData, categoriesData]) => {
       setBlogPosts(Array.isArray(blogsData) ? blogsData : []);
       if (Array.isArray(categoriesData) && categoriesData.length > 0) {
