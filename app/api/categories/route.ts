@@ -21,13 +21,16 @@ export async function GET() {
       })
     )
 
-    return NextResponse.json(categoriesWithCount)
+    return NextResponse.json(categoriesWithCount || [])
   } catch (error) {
     console.error('Get categories error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    )
+    // Hata durumunda boş array döndür ki frontend çökmesin
+    return NextResponse.json([], {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store'
+      }
+    })
   }
 }
 

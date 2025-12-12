@@ -85,21 +85,41 @@ export default function BlogPage() {
   useEffect(() => {
     // Paralel fetch - daha hızlı yükleme
     Promise.all([
-      fetch('/api/blogs?published=true').then(res => res.json()),
-      fetch("/api/categories").then(res => res.json()).catch(() => [])
+      fetch('/api/blogs?published=true')
+        .then(res => {
+          if (!res.ok) {
+            console.error('Blogs API error:', res.status);
+            return [];
+          }
+          return res.json();
+        })
+        .then(data => Array.isArray(data) ? data : [])
+        .catch(() => []),
+      fetch("/api/categories")
+        .then(res => {
+          if (!res.ok) {
+            console.error('Categories API error:', res.status);
+            return [];
+          }
+          return res.json();
+        })
+        .then(data => Array.isArray(data) ? data : [])
+        .catch(() => [])
     ]).then(([blogsData, categoriesData]) => {
-      setBlogPosts(blogsData);
+      setBlogPosts(Array.isArray(blogsData) ? blogsData : []);
       if (Array.isArray(categoriesData) && categoriesData.length > 0) {
         const categoryNames = categoriesData.map((cat: { name: string }) => cat.name);
         setAllCategories(categoryNames);
       } else {
         // Fallback: bloglardan kategorileri çıkar
-        const postCategories = Array.from(new Set(blogsData.map((post: BlogPost) => post.category))) as string[];
+        const postCategories = Array.from(new Set((Array.isArray(blogsData) ? blogsData : []).map((post: BlogPost) => post.category))) as string[];
         setAllCategories(postCategories);
       }
       setLoading(false);
     }).catch((error) => {
       console.error('Error fetching data:', error);
+      setBlogPosts([]);
+      setAllCategories([]);
       setLoading(false);
     });
   }, []);

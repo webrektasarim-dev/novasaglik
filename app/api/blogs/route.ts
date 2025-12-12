@@ -6,6 +6,8 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const published = searchParams.get('published')
+    const limitParam = searchParams.get('limit')
+    const limit = limitParam ? parseInt(limitParam, 10) : undefined
     
     // Blog listesi için content alanını çekme (performans için)
     const blogs = await prisma.blogPost.findMany({
@@ -23,13 +25,14 @@ export async function GET(request: NextRequest) {
         updatedAt: true,
         // content alanını çekmiyoruz - sadece listeleme için gerekli değil
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      take: limit
     })
 
     // Admin paneli için cache yok, her zaman fresh data
     const isAdmin = request.headers.get('referer')?.includes('/admin');
     
-    return NextResponse.json(blogs, {
+    return NextResponse.json(blogs || [], {
       headers: isAdmin ? {
         'Cache-Control': 'no-store, no-cache, must-revalidate',
         'Pragma': 'no-cache',
@@ -40,10 +43,13 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('Get blogs error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch blogs' },
-      { status: 500 }
-    )
+    // Hata durumunda boş array döndür ki frontend çökmesin
+    return NextResponse.json([], {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store'
+      }
+    })
   }
 }
 
