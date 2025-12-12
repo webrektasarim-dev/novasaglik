@@ -13,7 +13,9 @@
     "db:studio": "npx prisma studio",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
-    "db:deploy": "prisma migrate deploy"
+    "db:deploy": "prisma migrate deploy",
+    "db:export": "node scripts/export-from-sqlite.js",
+    "db:import": "node scripts/import-to-neon.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
