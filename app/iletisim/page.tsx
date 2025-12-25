@@ -19,7 +19,7 @@ export default function IletisimPage() {
       emailLabel: "E-posta",
       emailHelp: "24 saat içinde yanıt",
       addressLabel: "Adres",
-      addressText: "İstanbul",
+      addressText: "İstanbul / Avrupa Yakası",
       hoursLabel: "Çalışma Saatleri",
       hoursText: "Her Gün 24 Saat",
       hoursHelp: "Kesintisiz hizmet",
@@ -36,7 +36,7 @@ export default function IletisimPage() {
       messagePlaceholder: "Mesajınızı buraya yazın...",
       submit: "Mesajı Gönder",
       mapTitle: "Ofis Konumumuz",
-      mapSubtitle: "İstanbul",
+      mapSubtitle: "İstanbul / Avrupa Yakası",
       faqTitle: "Sıkça Sorulan Sorular",
       faq: [
         {
@@ -79,7 +79,7 @@ export default function IletisimPage() {
       emailLabel: "Email",
       emailHelp: "Response within 24 hours",
       addressLabel: "Address",
-      addressText: "Istanbul",
+      addressText: "Istanbul / European Side",
       hoursLabel: "Working Hours",
       hoursText: "24/7 Service",
       hoursHelp: "Continuous support",
@@ -96,7 +96,7 @@ export default function IletisimPage() {
       messagePlaceholder: "Write your message here...",
       submit: "Send Message",
       mapTitle: "Our Office Location",
-      mapSubtitle: "Istanbul",
+      mapSubtitle: "Istanbul / European Side",
       faqTitle: "Frequently Asked Questions",
       faq: [
         {
@@ -139,7 +139,7 @@ export default function IletisimPage() {
       emailLabel: "Email",
       emailHelp: "Ответ в течение 24 часов",
       addressLabel: "Адрес",
-      addressText: "Стамбул",
+      addressText: "Стамбул / Европейская сторона",
       hoursLabel: "Часы работы",
       hoursText: "24/7",
       hoursHelp: "Без перерывов",
@@ -156,7 +156,7 @@ export default function IletisimPage() {
       messagePlaceholder: "Напишите ваше сообщение...",
       submit: "Отправить",
       mapTitle: "Наш офис",
-      mapSubtitle: "Стамбул",
+      mapSubtitle: "Стамбул / Европейская сторона",
       faqTitle: "Часто задаваемые вопросы",
       faq: [
         { q: "В каких районах вы работаете?", a: "Мы обслуживаем все округа Стамбула и доступны 24/7 для срочных запросов." },
@@ -187,7 +187,7 @@ export default function IletisimPage() {
       emailLabel: "البريد الإلكتروني",
       emailHelp: "نرد خلال 24 ساعة",
       addressLabel: "العنوان",
-      addressText: "إسطنبول",
+      addressText: "إسطنبول / الجانب الأوروبي",
       hoursLabel: "ساعات العمل",
       hoursText: "خدمة 24/7",
       hoursHelp: "دعم مستمر",
@@ -204,7 +204,7 @@ export default function IletisimPage() {
       messagePlaceholder: "اكتب رسالتك هنا...",
       submit: "إرسال الرسالة",
       mapTitle: "موقع مكتبنا",
-      mapSubtitle: "إسطنبول",
+      mapSubtitle: "إسطنبول / الجانب الأوروبي",
       faqTitle: "الأسئلة الشائعة",
       faq: [
         { q: "ما هي المناطق التي تغطونها؟", a: "نخدم جميع أحياء إسطنبول ونوفر دعماً عاجلاً على مدار الساعة." },

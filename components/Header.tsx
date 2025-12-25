@@ -15,7 +15,7 @@ export default function Header() {
 
   const content = {
     tr: {
-      location: "İstanbul",
+      location: "İstanbul / Avrupa Yakası",
       nav: [
         { href: "/", label: "Ana Sayfa" },
         { href: "/hizmetler", label: "Hizmetler" },
@@ -27,7 +27,7 @@ export default function Header() {
       whatsappLabel: "WhatsApp",
     },
     en: {
-      location: "Istanbul",
+      location: "Istanbul / European Side",
       nav: [
         { href: "/", label: "Home" },
         { href: "/hizmetler", label: "Services" },
@@ -39,7 +39,7 @@ export default function Header() {
       whatsappLabel: "WhatsApp",
     },
     ru: {
-      location: "Стамбул",
+      location: "Стамбул / Европейская сторона",
       nav: [
         { href: "/", label: "Главная" },
         { href: "/hizmetler", label: "Услуги" },
@@ -51,7 +51,7 @@ export default function Header() {
       whatsappLabel: "WhatsApp",
     },
     ar: {
-      location: "إسطنبول",
+      location: "إسطنبول / الجانب الأوروبي",
       nav: [
         { href: "/", label: "الرئيسية" },
         { href: "/hizmetler", label: "الخدمات" },
