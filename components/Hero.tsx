@@ -409,7 +409,7 @@ export default function Hero() {
             <span className="medical-badge inline-flex items-center gap-2 animate-pulse bg-white/10 border-white/30 text-white">
               {heroTexts.badge}
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-lg">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight drop-shadow-lg">
               {heroTexts.titleLine1}
               <span className="block text-[#14b8a6]">{heroTexts.titleLine2}</span>
             </h1>
