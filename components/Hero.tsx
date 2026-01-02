@@ -340,8 +340,8 @@ export default function Hero() {
   const heroTexts = {
     tr: {
       badge: "✓ Sertifikalı Uzman Kadro",
-      titleLine1: "7/24 Evde ve Klinik",
-      titleLine2: "Sağlık Hizmeti",
+      titleLine1: "İstanbul Genelinde",
+      titleLine2: "Evde Sağlık ve Hemşirelik Hizmeti",
       description: "Serum takma, enjeksiyon, hemşirelik hizmetleri ve daha fazlası. Uzman hemşirelerimizle evinizdeyiz.",
       pricingBullet: "Bütçe dostu hizmet · Şeffaf ve erişilebilir fiyatlandırma",
       ctaPrimary: "Hemen Randevu Al",
