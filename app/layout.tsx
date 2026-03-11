@@ -7,7 +7,7 @@ import MaintenanceCheck from "@/components/MaintenanceCheck";
 import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
-  title: "Nova Sağlık Hizmetleri - 7/24 Evde ve Klinik Sağlık Hizmeti",
+  title: "Nova Sağlık Hizmetleri - 7/24 Evde Sağlık Hizmeti",
   description: "Profesyonel evde sağlık hizmetleri: Serum takma, enjeksiyon, hemşirelik hizmetleri, yaşlı bakımı ve daha fazlası. Uzman hemşirelerimizle 7/24 hizmetinizdeyiz. Güvenilir, bütçe dostu ve şeffaf fiyatlandırılan sağlık hizmeti.",
   keywords: "evde sağlık hizmetleri, serum takma, enjeksiyon, hemşirelik hizmeti, hasta bakımı, yaşlı bakımı, evde hemşire, 7/24 sağlık hizmeti, İstanbul evde sağlık",
   authors: [{ name: "Nova Sağlık Hizmetleri" }],
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Nova Sağlık Hizmetleri - 7/24 Evde ve Klinik Sağlık Hizmeti",
+    title: "Nova Sağlık Hizmetleri - 7/24 Evde Sağlık Hizmeti",
     description: "Profesyonel evde sağlık hizmetleri: Serum takma, enjeksiyon, hemşirelik hizmetleri ve daha fazlası. Uzman hemşirelerimizle 7/24 hizmetinizdeyiz.",
     url: 'https://www.novasaglikhizmeti.com',
     siteName: 'Nova Sağlık Hizmetleri',
@@ -105,7 +105,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "MedicalBusiness",
               "name": "Nova Sağlık Hizmetleri",
-              "description": "7/24 Evde ve Klinik Sağlık Hizmeti",
+              "description": "7/24 Evde Sağlık Hizmeti",
               "url": "https://www.novasaglikhizmeti.com",
               "telephone": "+90-533-486-61-11",
               "address": {

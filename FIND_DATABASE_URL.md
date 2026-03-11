@@ -76,3 +76,6 @@ Eğer connection string'i bulamıyorsanız:
 2. Neon Dashboard → Connection Details kontrol edin
 3. Eski deployment logs'larını kontrol edin
 
+
+
+

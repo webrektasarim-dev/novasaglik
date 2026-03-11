@@ -1,6 +1,13 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Allow: /favicon.ico
+Allow: /icon.png
+Allow: /apple-touch-icon.png
+Allow: /favicon-16x16.png
+Allow: /favicon-32x32.png
+Allow: /android-chrome-192x192.png
+Allow: /android-chrome-512x512.png
 
 Sitemap: https://www.novasaglikhizmeti.com/sitemap.xml
 

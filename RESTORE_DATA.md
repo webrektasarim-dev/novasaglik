@@ -132,3 +132,6 @@ Veya admin panelinden:
 - `/admin/blogs` - Blog yazılarını kontrol edin
 - `/admin/categories` - Kategorileri kontrol edin
 
+
+
+

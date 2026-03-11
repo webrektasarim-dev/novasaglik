@@ -79,7 +79,7 @@ const aboutContent: Record<
     teamSubtitle: "Alanında uzman, deneyimli ve sertifikalı hemşirelerimizle hizmetinizdeyiz",
     team: [
       { name: "Uzm. Hemş. Ayşe Yılmaz", title: "Kurucu ve Baş Hemşire", experience: "15 yıl deneyim", specialty: "Yoğun Bakım ve Evde Sağlık" },
-      { name: "Hemş. Mehmet Demir", title: "Klinik Sorumlusu", experience: "12 yıl deneyim", specialty: "Yaşlı Bakımı ve Kronik Hastalıklar" },
+      { name: "Hemş. Mehmet Demir", title: "Hizmet Sorumlusu", experience: "12 yıl deneyim", specialty: "Yaşlı Bakımı ve Kronik Hastalıklar" },
       { name: "Hemş. Zeynep Kaya", title: "Eğitim Koordinatörü", experience: "10 yıl deneyim", specialty: "Hasta Eğitimi ve Rehabilitasyon" },
       { name: "Hemş. Ahmet Şahin", title: "Saha Koordinatörü", experience: "8 yıl deneyim", specialty: "Acil Müdahale ve Yara Bakımı" },
     ],

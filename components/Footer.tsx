@@ -10,7 +10,7 @@ export default function Footer() {
 
   const content = {
     tr: {
-      about: "7/24 evde ve klinik sağlık hizmetleri. Uzman hemşirelerimizle yanınızdayız.",
+      about: "7/24 evde sağlık hizmeti. Uzman hemşirelerimizle yanınızdayız.",
       quickLinksTitle: "Hızlı Linkler",
       quickLinks: [
         { label: "Ana Sayfa", href: "/" },
@@ -30,7 +30,7 @@ export default function Footer() {
       copyright: "© 2024 Nova Sağlık Hizmetleri. Tüm hakları saklıdır.",
     },
     en: {
-      about: "24/7 in-home and clinical healthcare services. Our expert nurses are always with you.",
+      about: "24/7 in-home healthcare services. Our expert nurses are always with you.",
       quickLinksTitle: "Quick Links",
       quickLinks: [
         { label: "Home", href: "/" },
@@ -50,7 +50,7 @@ export default function Footer() {
       copyright: "© 2024 Nova Sağlık Services. All rights reserved.",
     },
     ru: {
-      about: "Круглосуточные медицинские услуги дома и в клинике. Наши опытные медсёстры всегда рядом.",
+      about: "Круглосуточные медицинские услуги на дому. Наши опытные медсёстры всегда рядом.",
       quickLinksTitle: "Быстрые ссылки",
       quickLinks: [
         { label: "Главная", href: "/" },
@@ -70,7 +70,7 @@ export default function Footer() {
       copyright: "© 2024 Nova Sağlık. Все права защищены.",
     },
     ar: {
-      about: "خدمات رعاية صحية منزلية وعيادية متوفرة على مدار الساعة مع فريق تمريضي متخصص.",
+      about: "خدمات رعاية صحية منزلية على مدار الساعة مع فريق تمريضي متخصص.",
       quickLinksTitle: "روابط سريعة",
       quickLinks: [
         { label: "الرئيسية", href: "/" },

@@ -16,7 +16,7 @@ export default function CTA() {
           Sağlığınız İçin <span className="text-[#14b8a6]">Hemen</span> Randevu Alın
         </>
       ),
-      description: "Uzman hemşirelerimiz, 7/24 evinizde veya kliniğimizde hizmetinizde. Hemen iletişime geçin, size en kısa sürede dönüş yapalım.",
+      description: "Uzman hemşirelerimiz, 7/24 evinizde hizmetinizde. Hemen iletişime geçin, size en kısa sürede dönüş yapalım.",
       online: "Online Randevu",
       whatsapp: "WhatsApp Mesaj",
       schedule: "Pazartesi - Pazar: 00:00 - 24:00",
@@ -28,7 +28,7 @@ export default function CTA() {
           Book Your <span className="text-[#14b8a6]">Care Visit</span> Now
         </>
       ),
-      description: "Our expert nurses are on-call 24/7 for in-home or clinical support. Reach out now and we’ll get back to you immediately.",
+      description: "Our expert nurses are on-call 24/7 for in-home care. Reach out now and we’ll get back to you immediately.",
       online: "Book Online",
       whatsapp: "WhatsApp Message",
       schedule: "Monday - Sunday: 24/7",
@@ -40,7 +40,7 @@ export default function CTA() {
           Запишитесь <span className="text-[#14b8a6]">на уход</span> прямо сейчас
         </>
       ),
-      description: "Наши медсёстры дежурят 24/7 — дома или в клинике. Оставьте заявку, и мы свяжемся с вами в ближайшее время.",
+      description: "Наши медсёстры дежурят 24/7 на дому. Оставьте заявку, и мы свяжемся с вами в ближайшее время.",
       online: "Онлайн-запись",
       whatsapp: "Сообщение в WhatsApp",
       schedule: "Понедельник – воскресенье: круглосуточно",
@@ -52,7 +52,7 @@ export default function CTA() {
           احجز <span className="text-[#14b8a6]">زيارة الرعاية</span> الآن
         </>
       ),
-      description: "فريقنا التمريضي متاح 24/7 للرعاية المنزلية أو داخل العيادة. تواصل معنا وسنرد عليك فوراً.",
+      description: "فريقنا التمريضي متاح 24/7 للرعاية المنزلية. تواصل معنا وسنرد عليك فوراً.",
       online: "احجز أونلاين",
       whatsapp: "رسالة واتساب",
       schedule: "السبت - الجمعة: متاح 24/7",

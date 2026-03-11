@@ -340,8 +340,8 @@ export default function Hero() {
   const heroTexts = {
     tr: {
       badge: "✓ Sertifikalı Uzman Kadro",
-      titleLine1: "İstanbul Genelinde",
-      titleLine2: "Evde Sağlık ve Hemşirelik Hizmeti",
+      titleLine1: "Nova Sağlık Hizmetleri",
+      titleLine2: "7/24 Evde Sağlık Hizmeti",
       description: "Serum takma, enjeksiyon, hemşirelik hizmetleri ve daha fazlası. Uzman hemşirelerimizle evinizdeyiz.",
       pricingBullet: "Bütçe dostu hizmet · Şeffaf ve erişilebilir fiyatlandırma",
       ctaPrimary: "Hemen Randevu Al",
@@ -353,7 +353,7 @@ export default function Hero() {
     },
     en: {
       badge: "✓ Certified Expert Team",
-      titleLine1: "24/7 In-Home & Clinical",
+      titleLine1: "24/7 In-Home",
       titleLine2: "Healthcare Service",
       description: "IV therapy, injections, nursing services and more delivered by our expert nurses at your home.",
       pricingBullet: "Budget-friendly service · Transparent and accessible pricing",
@@ -366,7 +366,7 @@ export default function Hero() {
     },
     ru: {
       badge: "✓ Сертифицированная команда",
-      titleLine1: "24/7 Домашнее и клиническое",
+      titleLine1: "24/7 Домашнее",
       titleLine2: "Медицинское обслуживание",
       description: "Внутривенные вливания, инъекции, уход медсестры и многое другое прямо у вас дома.",
       pricingBullet: "Доступные решения · Прозрачное ценообразование",
@@ -379,7 +379,7 @@ export default function Hero() {
     },
     ar: {
       badge: "✓ فريق تمريضي معتمد",
-      titleLine1: "رعاية صحية منزلية وعيادية",
+      titleLine1: "رعاية صحية منزلية",
       titleLine2: "على مدار 24/7",
       description: "خدمات المحاليل والحقن والتمريض وغيرها نقدمها لك في منزلك براحة وأمان.",
       pricingBullet: "خدمة ميسورة · تسعير واضح ومتاح للجميع",
