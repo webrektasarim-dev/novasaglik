@@ -27,6 +27,7 @@ const aboutContent: Record<
     heroDescription: string;
     storyTitle: string;
     storyParagraphs: string[];
+    storyResponsibleLine: string;
     values: ValueItem[];
     milestonesTitle: string;
     milestones: { year: string; event: string }[];
@@ -46,6 +47,7 @@ const aboutContent: Record<
       "10 yılı aşkın deneyimimiz boyunca 500'den fazla hastaya hizmet verdik. Her hastamız bizim için özeldir ve her birine ailemizin bir ferdi gibi özen gösteririz.",
       "Sürekli gelişen sağlık sektöründe ekibimizi en son medikal bilgilerle donatarak sizlere en iyi hizmeti sunmayı taahhüt ediyoruz.",
     ],
+    storyResponsibleLine: "İşletme / sorumlu kişi adı: Murat Taha Aytaç",
     values: [
       {
         icon: "🎯",
@@ -100,6 +102,7 @@ const aboutContent: Record<
       "With more than a decade of experience, we have supported over 500 patients. Each person we care for is treated like part of our family.",
       "We constantly train our team with the latest medical knowledge and technology to provide the safest and most effective service possible.",
     ],
+    storyResponsibleLine: "Business / responsible person: Murat Taha Aytaç",
     values: [
       {
         icon: "🎯",
@@ -151,6 +154,7 @@ const aboutContent: Record<
       "За более чем 10 лет мы помогли более чем 500 пациентам. Каждый человек для нас — член семьи.",
       "Мы постоянно обучаем команду и внедряем новые технологии, чтобы вы получали самый безопасный и эффективный уход.",
     ],
+    storyResponsibleLine: "Предприятие / ответственное лицо: Мурат Таха Айтач",
     values: [
       {
         icon: "🎯",
@@ -202,6 +206,7 @@ const aboutContent: Record<
       "خلال أكثر من عشر سنوات قدمنا خدماتنا لمئات المرضى، ونحرص دائماً على معاملة كل حالة كجزء من عائلتنا.",
       "نستثمر باستمرار في تدريب فريقنا واستخدام أحدث التقنيات لنضمن تقديم رعاية آمنة ومتمحورة حول المريض.",
     ],
+    storyResponsibleLine: "اسم المنشأة / المسؤول: مراد طه أيتاچ",
     values: [
       {
         icon: "🎯",
@@ -270,6 +275,9 @@ export default function HakkimizdaPage() {
               {content.storyParagraphs.map((paragraph, index) => (
                 <p key={`${language}-story-${index}`}>{paragraph}</p>
               ))}
+              <p className="pt-6 mt-2 border-t border-gray-200 text-gray-800 font-medium">
+                {content.storyResponsibleLine}
+              </p>
             </div>
           </div>
         </div>
